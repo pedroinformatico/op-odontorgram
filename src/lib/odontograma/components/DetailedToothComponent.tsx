@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tooth, ToothStatus } from '../types';
+import { getToothVerticalOffset } from '../config/layoutConfig';
 import { Check, AlertCircle, CircleDot, Crown, X, Plus, Zap, AlertTriangle as TriangleAlert, Link, AlertOctagon } from 'lucide-react';
 
 export interface DetailedToothComponentProps {
@@ -21,6 +22,7 @@ const statusIcons = {
   fracture: TriangleAlert,
   bridge: Link,
   extraction_indicated: AlertOctagon,
+  not_erupted: undefined,
 };
 
 export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({ 
@@ -42,6 +44,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
       fracture: 'border-accent text-accent-content',
       bridge: 'border-purple-500 text-purple-600',
       extraction_indicated: 'border-red-600 text-red-700',
+      not_erupted: 'border-gray-300 text-gray-400',
     };
     
     if (isTemporary) {
@@ -59,6 +62,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
       case 'fracture': return 'bg-accent/20 border-accent text-accent-content';
       case 'bridge': return 'bg-purple-500/20 border-purple-500 text-purple-600';
       case 'extraction_indicated': return 'bg-red-600/20 border-red-600 text-red-700';
+      case 'not_erupted': return 'bg-gray-100 border-gray-300 text-gray-400 opacity-50';
       default: return 'bg-surface-secondary border-border-color text-text-primary';
     }
   };
@@ -91,6 +95,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
       case 'fracture': return 'bg-orange-600/40 border-orange-600';
       case 'bridge': return 'bg-purple-500/40 border-purple-500';
       case 'extraction_indicated': return 'bg-red-600/40 border-red-600';
+      case 'not_erupted': return 'bg-gray-200/40 border-gray-300';
       default: return 'bg-surface-secondary/40 border-border-color';
     }
   };
@@ -127,11 +132,12 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   };
 
   const StatusIcon = statusIcons[tooth.status];
+  const verticalOffset = getToothVerticalOffset(tooth.id);
 
   return (
     <div 
       className="relative group flex flex-col items-center"
-      style={{ transform: `translateY(${tooth.verticalOffset || 0}px)` }}
+      style={{ transform: `translateY(${verticalOffset}px)` }}
     >
       {/* Número del diente con tooltip */}
       <div className={`tooltip tooltip-top mb-1 ${tooth.demoLabel ? 'before:max-w-xs before:whitespace-pre-wrap' : ''}`} 

@@ -6,7 +6,6 @@ export interface Tooth {
   status: ToothStatus;
   notes?: string;
   isTemporary?: boolean;
-  verticalOffset?: number;
   
   // Anatomical properties
   toothType?: 'incisor' | 'canine' | 'premolar' | 'molar';

@@ -51,7 +51,8 @@ export type ToothStatus =
   | 'root_canal'
   | 'fracture'
   | 'bridge'
-  | 'extraction_indicated';
+  | 'extraction_indicated'
+  | 'not_erupted';
 
 export interface Patient {
   name: string;

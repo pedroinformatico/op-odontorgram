@@ -21,6 +21,13 @@ export {
   initialTemporaryTeeth
 } from './data/dentalData';
 
+// Layout configuration
+export {
+  toothLayoutConfig,
+  getToothVerticalOffset,
+  type ToothLayoutConfig
+} from './config/layoutConfig';
+
 // Utils for creating teeth data
 export const createTooth = (
   id: number,
@@ -35,7 +42,6 @@ export const createTooth = (
     quadrant,
     position,
     status: 'healthy',
-    verticalOffset: 0,
     ...options
   } as Tooth;
 };

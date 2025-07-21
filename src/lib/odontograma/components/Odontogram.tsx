@@ -7,14 +7,14 @@ export interface OdontogramProps {
   temporaryTeeth: Tooth[];
   showTemporaryTeeth: boolean;
   onToggleTemporaryTeeth: (show: boolean) => void;
-  showDemoMode: boolean;
-  onToggleDemoMode: (show: boolean) => void;
   selectedTooth: Tooth | null;
   onToothClick: (tooth: Tooth) => void;
   showBiteEffect: boolean;
   onToggleBiteEffect: (show: boolean) => void;
   isAnimatingBite: boolean;
   onSimulateBite: () => void;
+  selectedCaseId?: string;
+  onCaseSelect?: (caseId: string) => void;
 }
 
 export const Odontogram: React.FC<OdontogramProps> = ({ 
@@ -22,14 +22,14 @@ export const Odontogram: React.FC<OdontogramProps> = ({
   temporaryTeeth, 
   showTemporaryTeeth, 
   onToggleTemporaryTeeth,
-  showDemoMode,
-  onToggleDemoMode,
   selectedTooth, 
   onToothClick,
   showBiteEffect,
   onToggleBiteEffect,
   isAnimatingBite,
-  onSimulateBite
+  onSimulateBite,
+  selectedCaseId,
+  onCaseSelect
 }) => {
   const getQuadrantTeeth = (quadrant: number) => {
     return teeth.filter(tooth => tooth.quadrant === quadrant).sort((a, b) => a.position - b.position);
@@ -107,21 +107,6 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               20 dientes temporales
             </div>
           )}
-          
-          {/* Demo Mode Toggle */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-text-secondary">Modo Demo</span>
-            <button
-              onClick={() => onToggleDemoMode(!showDemoMode)}
-              className={`w-10 h-5 rounded-full transition-colors relative ${
-                showDemoMode ? 'bg-purple-500' : 'bg-gray-300'
-              }`}
-            >
-              <div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-transform ${
-                showDemoMode ? 'translate-x-5' : 'translate-x-0.5'
-              }`}></div>
-            </button>
-          </div>
           
           {/* Bite Effect Button */}
           <button

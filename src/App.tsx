@@ -3,7 +3,10 @@ import { Patient, ToothStatus } from './types/dental';
 import { generateDemoTeeth, generateDemoTemporaryTeeth } from './data/demoTeeth';
 import { PatientHeader } from './components/PatientHeader';
 import { FloatingToothDetailsCard } from './components/FloatingToothDetailsCard';
+import { ColorLegend } from './components/ColorLegend';
+import { CompactCaseSelector } from './components/CompactCaseSelector';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { getClinicalCaseById } from './data/clinicalCases';
 
 // Importar desde la librería
 import { Odontogram, Tooth, initialPermanentTeeth, initialTemporaryTeeth } from './lib/odontograma';
@@ -13,7 +16,6 @@ function App() {
   const [teeth, setTeeth] = useLocalStorage<Tooth[]>('odontogram-teeth', initialPermanentTeeth);
   const [tempTeeth, setTempTeeth] = useLocalStorage<Tooth[]>('odontogram-temp-teeth', initialTemporaryTeeth);
   const [showTemporaryTeeth, setShowTemporaryTeeth] = useLocalStorage<boolean>('show-temporary-teeth', false);
-  const [showDemoMode, setShowDemoMode] = useState<boolean>(false);
   const [patient, setPatient] = useLocalStorage<Patient>('odontogram-patient', {
     name: '',
     age: 0,
@@ -22,9 +24,73 @@ function App() {
   const [selectedTooth, setSelectedTooth] = useState<Tooth | null>(null);
   const [showBiteEffect, setShowBiteEffect] = useState<boolean>(true); // Empezar abierto
   const [isAnimatingBite, setIsAnimatingBite] = useState<boolean>(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<string>('empty');
 
   const handleToothClick = (tooth: Tooth, event?: React.MouseEvent) => {
     setSelectedTooth(tooth);
+  };
+
+  // Manejar selección de caso clínico
+  const handleCaseSelect = (caseId: string) => {
+    setSelectedCaseId(caseId);
+    
+    // Si es el caso por defecto, restaurar los datos iniciales
+    if (caseId === 'empty') {
+      setTeeth(initialPermanentTeeth);
+      setTempTeeth(initialTemporaryTeeth);
+      setSelectedTooth(null);
+      return;
+    }
+    
+    const clinicalCase = getClinicalCaseById(caseId);
+    
+    if (clinicalCase) {
+      // Preservar los datos estructurales y solo actualizar status y notes
+      setTeeth(prevTeeth => {
+        return prevTeeth.map(tooth => {
+          const caseToothData = clinicalCase.permanentTeeth.find(t => t.id === tooth.id);
+          if (caseToothData) {
+            return {
+              ...tooth, // Preservar todos los datos estructurales
+              status: caseToothData.status,
+              notes: caseToothData.notes || tooth.notes
+            };
+          }
+          return tooth;
+        });
+      });
+      
+      setTempTeeth(prevTeeth => {
+        return prevTeeth.map(tooth => {
+          const caseToothData = clinicalCase.temporaryTeeth.find(t => t.id === tooth.id);
+          if (caseToothData) {
+            return {
+              ...tooth, // Preservar todos los datos estructurales
+              status: caseToothData.status,
+              notes: caseToothData.notes || tooth.notes
+            };
+          }
+          return tooth;
+        });
+      });
+      
+      // Actualizar edad del paciente si está definida
+      if (clinicalCase.patientAge) {
+        setPatient(prev => ({
+          ...prev,
+          age: clinicalCase.patientAge || 0,
+          name: prev.name || `Paciente ${clinicalCase.name}`
+        }));
+      }
+      
+      // Mostrar dientes temporales para casos pediátricos
+      if (clinicalCase.category === 'pediatric' || clinicalCase.category === 'infant') {
+        setShowTemporaryTeeth(true);
+      }
+      
+      // Limpiar selección de diente
+      setSelectedTooth(null);
+    }
   };
 
   // Ejecutar animación de mordida al iniciar
@@ -96,12 +162,12 @@ function App() {
     }
     
     // Resetear los dientes a su estado inicial
-    setTeeth(initialTeeth);
-    setTempTeeth(temporaryTeeth);
+    setTeeth(initialPermanentTeeth);
+    setTempTeeth(initialTemporaryTeeth);
+    setSelectedCaseId('empty');
     
-    // Limpiar selección y cerrar panel flotante
+    // Limpiar selección
     setSelectedTooth(null);
-    setShowFloatingPanel(false);
     
     // Opcional: Limpiar también los datos del paciente
     setPatient({
@@ -115,7 +181,10 @@ function App() {
   return (
     <div className="min-h-screen bg-surface-primary text-text-primary">
       {/* Header del Paciente */}
-      <PatientHeader patient={patient} onPatientChange={setPatient} />
+      <PatientHeader 
+        patient={patient} 
+        onPatientChange={setPatient}
+      />
       
       {/* Layout Principal - Grid 3 Columnas */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 h-[calc(100vh-80px)]">
@@ -123,20 +192,36 @@ function App() {
         <div className="lg:col-span-2">
           <div className="bg-base-100 rounded-lg shadow-sm border border-base-300 p-6 h-full overflow-auto">
             <div className="flex flex-col h-full">
+              {/* Header con FDI y selector de casos */}
+              <div className="mb-2 flex justify-between items-center">
+                <span className="text-xs text-base-content/60 bg-base-200 px-2 py-1 rounded">
+                  Sistema de numeración: FDI
+                </span>
+                <CompactCaseSelector
+                  selectedCaseId={selectedCaseId}
+                  onCaseSelect={handleCaseSelect}
+                />
+              </div>
+              
               <Odontogram
-                teeth={showDemoMode ? generateDemoTeeth() : teeth}
-                temporaryTeeth={showDemoMode ? generateDemoTemporaryTeeth() : tempTeeth}
+                teeth={teeth}
+                temporaryTeeth={tempTeeth}
                 showTemporaryTeeth={showTemporaryTeeth}
                 onToggleTemporaryTeeth={setShowTemporaryTeeth}
-                showDemoMode={showDemoMode}
-                onToggleDemoMode={setShowDemoMode}
                 selectedTooth={selectedTooth}
                 onToothClick={handleToothClick}
                 showBiteEffect={showBiteEffect}
                 onToggleBiteEffect={setShowBiteEffect}
                 isAnimatingBite={isAnimatingBite}
                 onSimulateBite={simulateBite}
+                selectedCaseId={selectedCaseId}
+                onCaseSelect={handleCaseSelect}
               />
+              
+              {/* Leyenda de colores y símbolos */}
+              <div className="mt-4">
+                <ColorLegend />
+              </div>
               
               {/* Botón de reset */}
               <div className="mt-4 flex justify-center">
