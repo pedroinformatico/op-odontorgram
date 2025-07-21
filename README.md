@@ -2,6 +2,7 @@
 
 ![OP Odontogram Demo](src/img/odontograma-dark.png)
 
+[![Demo](https://img.shields.io/badge/Demo-Live-green)](https://pedroinformatico.github.io/op-odontorgram/)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)](https://www.typescriptlang.org/)
@@ -11,6 +12,8 @@
 ## Descripción
 
 **OP Odontogram** es una librería de React para crear odontogramas dentales interactivos. Permite visualizar y gestionar el estado de dientes permanentes y temporales con una interfaz moderna e intuitiva.
+
+🚀 **[Ver Demo en Vivo](https://pedroinformatico.github.io/op-odontorgram/)**
 
 > ⚠️ **Nota**: Esta librería está actualmente en versión beta. La API puede cambiar en futuras versiones.
 
@@ -50,14 +53,14 @@ npm install op-odontogram
 ## Uso Básico
 
 ```jsx
-import { Odontogram } from 'op-odontogram';
-import 'op-odontogram/styles/odontogram.css';
+import { Odontogram } from "op-odontogram";
+import "op-odontogram/styles/odontogram.css";
 
 function App() {
   return (
     <Odontogram
       teeth={teeth}
-      onToothClick={(tooth) => console.log('Diente seleccionado:', tooth)}
+      onToothClick={(tooth) => console.log("Diente seleccionado:", tooth)}
     />
   );
 }
@@ -65,7 +68,7 @@ function App() {
 
 ## Demo Interactiva
 
-![Interfaz del Odontogram](src/img/image.png)
+![Interfaz del Odontogram](src/img/odontograma.png)
 
 La aplicación incluye:
 
@@ -114,4 +117,4 @@ Este proyecto está bajo la Licencia MIT - ve el archivo [LICENSE](LICENSE) para
 
 ---
 
-**Nota:** *Si tienes cualquier problema con los dientes, solo toma leche* 🥛
+**Nota:** _Si tienes cualquier problema con los dientes, solo toma leche_ 🥛
