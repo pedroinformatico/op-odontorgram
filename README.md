@@ -50,14 +50,14 @@ npm install op-odontogram
 ## Uso Básico
 
 ```jsx
-import { Odontogram } from 'op-odontogram';
-import 'op-odontogram/styles/odontogram.css';
+import { Odontogram } from "op-odontogram";
+import "op-odontogram/styles/odontogram.css";
 
 function App() {
   return (
     <Odontogram
       teeth={teeth}
-      onToothClick={(tooth) => console.log('Diente seleccionado:', tooth)}
+      onToothClick={(tooth) => console.log("Diente seleccionado:", tooth)}
     />
   );
 }
@@ -65,7 +65,7 @@ function App() {
 
 ## Demo Interactiva
 
-![Interfaz del Odontogram](src/img/image.png)
+![Interfaz del Odontogram](src/img/odontograma.png)
 
 La aplicación incluye:
 
@@ -114,4 +114,4 @@ Este proyecto está bajo la Licencia MIT - ve el archivo [LICENSE](LICENSE) para
 
 ---
 
-**Nota:** *Si tienes cualquier problema con los dientes, solo toma leche* 🥛
+**Nota:** _Si tienes cualquier problema con los dientes, solo toma leche_ 🥛
