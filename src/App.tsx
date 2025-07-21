@@ -26,6 +26,14 @@ function App() {
   const [selectedCaseId, setSelectedCaseId] = useState<string>('empty');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
+  // Sincronizar el tema con el atributo del documento al montar
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+    if (currentTheme) {
+      setTheme(currentTheme);
+    }
+  }, []);
+
   const handleToothClick = (tooth: Tooth, event?: React.MouseEvent) => {
     setSelectedTooth(tooth);
   };
@@ -161,6 +169,8 @@ function App() {
       <PatientHeader 
         patient={patient} 
         onPatientChange={setPatient}
+        theme={theme}
+        onThemeChange={setTheme}
       />
       
       {/* Layout Principal - Grid 3 Columnas */}

@@ -38,7 +38,7 @@ export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '', theme 
     {
       tooth: { id: 5, clinicalId: '1.5', quadrant: 1, position: 5, status: 'extracted', surfaces: { mesial: 'extracted', distal: 'extracted', buccal: 'extracted', lingual: 'extracted', occlusal: 'extracted' } },
       label: 'Extraído',
-      chipColorClass: 'bg-gray-600'
+      chipColorClass: 'bg-gray-700'
     },
     {
       tooth: { id: 6, clinicalId: '1.6', quadrant: 1, position: 6, status: 'root_canal', surfaces: { mesial: 'root_canal', distal: 'root_canal', buccal: 'root_canal', lingual: 'root_canal', occlusal: 'root_canal' } },
@@ -99,18 +99,18 @@ export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '', theme 
               <div
                 key={tooth.id}
                 className={`flex flex-col items-center justify-between 
-                           ${isDarkMode ? 'bg-gray-850 border-gray-700 shadow-md' : 'bg-white border-gray-200 shadow-sm'}
+                           ${isDarkMode ? 'bg-gray-800 border-gray-700 shadow-md' : 'bg-white border-gray-200 shadow-sm'}
                            rounded-lg border p-2`} 
               >
-                <div className="flex-grow flex items-center justify-center py-2"> 
-                  <div className="scale-[0.75] origin-center" style={{ width: '50px', height: '60px' }}> 
+                <div className="flex-grow flex items-center justify-center py-1"> 
+                  <div className="scale-[0.75] origin-center mb-3" style={{ width: '50px', height: '60px' }}> 
                     <DetailedToothComponent
                       tooth={tooth}
                       isSelected={false}
-                      onClick={() => {}}
-                      showBiteEffect={false}
+                      onToothClick={() => {}}
+                      isUpper={true}
                       isTemporary={false} 
-                      isDarkMode={isDarkMode} // <-- ESENCIAL: Pasar el modo a DetailedToothComponent
+                      isDarkMode={isDarkMode}
                     />
                   </div>
                 </div>

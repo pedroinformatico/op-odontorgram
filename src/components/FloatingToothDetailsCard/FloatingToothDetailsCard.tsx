@@ -151,12 +151,12 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
   const procedureCount = tooth.procedures?.length || 0;
 
   return (
-    <div className="h-full bg-surface-primary flex flex-col">
+    <div className="h-full bg-base-100 flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-border-color flex items-center justify-between bg-surface-secondary">
+      <div className="p-4 border-b border-base-300 flex items-center justify-between bg-base-200">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-white font-bold text-sm ${hasUnsavedChanges ? 'save-success' : ''}`}>
+            <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-accent-content font-bold text-sm ${hasUnsavedChanges ? 'save-success' : ''}`}>
               {tooth.clinicalId || tooth.id}
             </div>
             {hasNotes && <div className="has-notes-indicator" />}
@@ -165,10 +165,10 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
             )}
           </div>
           <div>
-            <h3 className="font-semibold text-text-primary">
+            <h3 className="font-semibold text-base-content">
               {getToothTypeName(tooth.position)}
             </h3>
-            <p className="text-sm text-text-secondary">
+            <p className="text-sm text-base-content/70">
               {getQuadrantName(tooth.quadrant)} • Posición {tooth.position}
             </p>
             {tooth.isTemporary && (
@@ -187,8 +187,8 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
       </div>
 
       {/* Tabs */}
-      <div className="p-4 border-b border-border-color bg-surface-secondary">
-        <div className="flex bg-surface-primary rounded-lg p-1">
+      <div className="p-4 border-b border-base-300 bg-base-200">
+        <div className="flex bg-base-100 rounded-lg p-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -196,8 +196,8 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
                 key={tab.id}
                 className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   activeTab === tab.id 
-                    ? 'bg-accent text-white' 
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-secondary'
+                    ? 'bg-accent text-accent-content' 
+                    : 'text-base-content/70 hover:text-base-content hover:bg-base-200'
                 }`}
                 onClick={() => setActiveTab(tab.id)}
               >
@@ -215,7 +215,7 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
           <div className="space-y-4">
             {/* Herramientas */}
             <div>
-              <h4 className="text-sm font-medium text-text-secondary mb-3">Selecciona un estado:</h4>
+              <h4 className="text-sm font-medium text-base-content/70 mb-3">Selecciona un estado:</h4>
               <div className="grid grid-cols-4 gap-2">
                 {statusOptions.map((status) => (
                   <button
@@ -243,16 +243,16 @@ export const FloatingToothDetailsCard: React.FC<FloatingToothDetailsCardProps> =
 
             {/* Diente Ampliado */}
             <div className="flex flex-col items-center">
-              <h4 className="text-sm font-medium text-text-secondary mb-4">
+              <h4 className="text-sm font-medium text-base-content/70 mb-4">
                 Haz clic en cada superficie para aplicar: 
-                <span className={`ml-1 font-semibold text-${statusOptions.find(s => s.id === selectedTool)?.color}`}>
+                <span className="ml-1 font-semibold" style={{ color: statusOptions.find(s => s.id === selectedTool)?.color }}>
                   {statusOptions.find(s => s.id === selectedTool)?.name}
                 </span>
               </h4>
               
               {/* SVG del diente ampliado */}
               <div className="relative mb-4">
-                <svg width="200" height="200" viewBox="0 0 200 200" className="border border-border-color rounded-lg bg-surface-secondary">
+                <svg width="200" height="200" viewBox="0 0 200 200" className="border border-base-300 rounded-lg bg-base-200">
                   {/* Superficie Vestibular (arriba) */}
                   <rect
                     x="60"
