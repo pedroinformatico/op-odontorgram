@@ -9,7 +9,10 @@ const validToothStatuses: ToothStatus[] = [
   'extracted',
   'implant',
   'root_canal',
-  'fracture'
+  'fracture',
+  'bridge',
+  'extraction_indicated',
+  'not_erupted'
 ];
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
