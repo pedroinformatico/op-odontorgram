@@ -4,13 +4,16 @@ Una librería de React para crear odontogramas dentales interactivos. Permite vi
 
 ## 🦷 Características
 
-- Visualización completa de dentadura adulta (32 dientes) y temporal (20 dientes)
-- Estados predefinidos para cada diente (sano, caries, obturado, corona, etc.)
-- Visualización de superficies dentales (oclusal, vestibular, lingual, mesial, distal)
-- Sistema de numeración FDI internacional
-- Totalmente personalizable con CSS
-- TypeScript incluido
-- Sin dependencias externas (solo React)
+- **Visualización completa**: 32 dientes permanentes y 20 dientes temporales
+- **Estados dentales**: 11 estados predefinidos incluyendo no erupcionado para casos pediátricos
+- **Superficies dentales**: Control individual de 5 superficies por diente
+- **Animaciones**: Efecto de mordida y transiciones suaves
+- **Casos clínicos**: Ejemplos predefinidos para demostración
+- **Sistema FDI**: Numeración internacional estándar
+- **Propiedades periodontales**: Movilidad, furca, recesión gingival
+- **TypeScript**: Totalmente tipado para mejor DX
+- **Personalizable**: CSS y temas adaptables
+- **Dependencias mínimas**: React y Lucide React (iconos)
 
 ## 📦 Instalación
 
@@ -62,47 +65,72 @@ function App() {
 | Prop | Tipo | Por Defecto | Descripción |
 |------|------|-------------|-------------|
 | `teeth` | `Tooth[]` | requerido | Array de dientes permanentes |
-| `temporaryTeeth` | `Tooth[]` | `[]` | Array de dientes temporales |
-| `showTemporaryTeeth` | `boolean` | `false` | Mostrar/ocultar dientes temporales |
-| `selectedTooth` | `Tooth \| null` | `null` | Diente actualmente seleccionado |
-| `onToothClick` | `(tooth: Tooth) => void` | `() => {}` | Callback al hacer clic en un diente |
-| `onToothUpdate` | `(tooth: Tooth) => void` | - | Callback para actualizar un diente |
-| `className` | `string` | `''` | Clases CSS adicionales |
+| `temporaryTeeth` | `Tooth[]` | requerido | Array de dientes temporales |
+| `showTemporaryTeeth` | `boolean` | requerido | Mostrar/ocultar dientes temporales |
+| `onToggleTemporaryTeeth` | `(show: boolean) => void` | requerido | Callback para toggle de dientes temporales |
+| `selectedTooth` | `Tooth \| null` | requerido | Diente actualmente seleccionado |
+| `onToothClick` | `(tooth: Tooth) => void` | requerido | Callback al hacer clic en un diente |
+| `showBiteEffect` | `boolean` | requerido | Mostrar efecto de mordida |
+| `onToggleBiteEffect` | `(show: boolean) => void` | requerido | Toggle efecto de mordida |
+| `isAnimatingBite` | `boolean` | requerido | Estado de animación de mordida |
+| `onSimulateBite` | `() => void` | requerido | Simular animación de mordida |
+| `selectedCaseId` | `string` | opcional | ID del caso clínico seleccionado |
+| `onCaseSelect` | `(caseId: string) => void` | opcional | Callback para selección de caso |
 
 ## 🦷 Estructura del Tipo Tooth
 
 ```typescript
 interface Tooth {
-  id: number;
+  // Identificación
+  id: number;                       // ID único (ej: 11 para diente 1.1)
   clinicalId?: string;              // Notación FDI: "1.8", "2.1", etc.
-  quadrant: 1 | 2 | 3 | 4;
-  position: number;
-  status: ToothStatus;
-  notes?: string;
-  isTemporary?: boolean;
-  verticalOffset?: number;
   
-  // Propiedades clínicas opcionales
+  // Ubicación
+  quadrant: 1 | 2 | 3 | 4;         // Cuadrante dental
+  position: number;                 // Posición en el cuadrante (1-8)
+  
+  // Estado clínico
+  status: ToothStatus;              // Estado actual del diente
+  notes?: string;                   // Notas clínicas
+  isTemporary?: boolean;            // Si es diente temporal
+  
+  // Propiedades anatómicas
+  toothType?: 'incisor' | 'canine' | 'premolar' | 'molar';
+  rootCount?: 1 | 2 | 3;
+  rootType?: 'single' | 'bifurcated' | 'trifurcated';
+  
+  // Propiedades periodontales
+  mobilityGrade?: 0 | 1 | 2 | 3;   // Grado de movilidad
+  furcationGrade?: 0 | 1 | 2 | 3;  // Afectación de furca
+  gingivalRecession?: number;       // Recesión en mm
+  pocketDepth?: number;             // Profundidad de bolsa en mm
+  
+  // Superficies dentales
   surfaces?: {
-    oclusal?: ToothStatus;
-    vestibular?: ToothStatus;
-    lingual?: ToothStatus;
-    mesial?: ToothStatus;
-    distal?: ToothStatus;
+    oclusal?: ToothStatus;          // Superficie masticatoria
+    vestibular?: ToothStatus;       // Hacia labio/mejilla
+    lingual?: ToothStatus;          // Hacia lengua
+    mesial?: ToothStatus;           // Hacia línea media
+    distal?: ToothStatus;           // Alejada de línea media
   };
+  
+  // Metadatos
+  lastUpdate?: string;              // Fecha última actualización
+  procedures?: ToothProcedure[];    // Historial de procedimientos
 }
 
 type ToothStatus = 
-  | 'healthy'
-  | 'caries'
-  | 'filled'
-  | 'crown'
-  | 'extracted'
-  | 'implant'
-  | 'root_canal'
-  | 'fracture'
-  | 'bridge'
-  | 'extraction_indicated';
+  | 'healthy'              // Sano
+  | 'caries'              // Caries activa
+  | 'filled'              // Obturado
+  | 'crown'               // Corona protésica
+  | 'extracted'           // Extraído
+  | 'implant'             // Implante dental
+  | 'root_canal'          // Endodoncia
+  | 'fracture'            // Fracturado
+  | 'bridge'              // Puente
+  | 'extraction_indicated' // Indicado para extracción
+  | 'not_erupted';        // No erupcionado
 ```
 
 ## 🎨 Personalización de Estilos
@@ -129,6 +157,140 @@ La librería incluye un archivo CSS con estilos predeterminados. Puedes sobrescr
 .tooth-surface-oclusal { }
 .tooth-surface-vestibular { }
 /* ... otras superficies */
+```
+
+## 🚀 Funcionalidades Avanzadas
+
+### Animación de Mordida
+
+```jsx
+function OdontogramWithBite() {
+  const [showBiteEffect, setShowBiteEffect] = useState(false);
+  const [isAnimatingBite, setIsAnimatingBite] = useState(false);
+
+  const simulateBite = () => {
+    if (isAnimatingBite) return;
+    
+    setIsAnimatingBite(true);
+    setShowBiteEffect(false); // Cerrar
+    
+    setTimeout(() => {
+      setShowBiteEffect(true); // Abrir
+    }, 300);
+    
+    setTimeout(() => {
+      setShowBiteEffect(false); // Morder
+    }, 1000);
+    
+    setTimeout(() => {
+      setIsAnimatingBite(false);
+    }, 1500);
+  };
+
+  return (
+    <Odontogram
+      teeth={teeth}
+      temporaryTeeth={temporaryTeeth}
+      showBiteEffect={showBiteEffect}
+      onToggleBiteEffect={setShowBiteEffect}
+      isAnimatingBite={isAnimatingBite}
+      onSimulateBite={simulateBite}
+      // ... otras props
+    />
+  );
+}
+```
+
+### Casos Clínicos Predefinidos
+
+```jsx
+import { getClinicalCaseById } from 'op-odontogram';
+
+function OdontogramWithCases() {
+  const [selectedCaseId, setSelectedCaseId] = useState('empty');
+  
+  const handleCaseSelect = (caseId) => {
+    const clinicalCase = getClinicalCaseById(caseId);
+    if (clinicalCase) {
+      // Aplicar el caso clínico
+      setTeeth(clinicalCase.permanentTeeth);
+      setTemporaryTeeth(clinicalCase.temporaryTeeth);
+    }
+  };
+
+  return (
+    <Odontogram
+      selectedCaseId={selectedCaseId}
+      onCaseSelect={handleCaseSelect}
+      // ... otras props
+    />
+  );
+}
+
+// Casos disponibles:
+// - 'empty': Por defecto
+// - 'basic': Caso básico adulto
+// - 'periodontal': Enfermedad periodontal
+// - 'complex': Múltiples tratamientos
+// - 'orthodontic': Ortodoncia activa
+// - 'pediatric': Dentición mixta (6-8 años)
+// - 'infant': Solo temporales (3-5 años)
+```
+
+### Superficies Dentales
+
+```jsx
+function updateToothSurface(tooth, surface, status) {
+  return {
+    ...tooth,
+    surfaces: {
+      ...tooth.surfaces,
+      [surface]: status
+    }
+  };
+}
+
+// Ejemplo de uso
+const updatedTooth = updateToothSurface(
+  tooth, 
+  'oclusal', 
+  'caries'
+);
+```
+
+### Propiedades Periodontales
+
+```jsx
+function PeriodontalExam() {
+  const [teeth, setTeeth] = useState(initialTeeth);
+
+  const updatePeriodontalData = (toothId, data) => {
+    setTeeth(teeth.map(tooth => 
+      tooth.id === toothId
+        ? {
+            ...tooth,
+            mobilityGrade: data.mobility,
+            furcationGrade: data.furcation,
+            gingivalRecession: data.recession,
+            pocketDepth: data.pocket
+          }
+        : tooth
+    ));
+  };
+
+  return (
+    <>
+      <Odontogram teeth={teeth} /* ... */ />
+      
+      {selectedTooth && (
+        <PeriodontalForm
+          tooth={selectedTooth}
+          onUpdate={(data) => updatePeriodontalData(selectedTooth.id, data)}
+        />
+      )}
+    </>
+  );
+}
 ```
 
 ## 💡 Ejemplo Avanzado
@@ -212,10 +374,42 @@ function DentalChart() {
 }
 ```
 
-## 🔧 Utilidades Incluidas
+## 🔧 Utilidades y Exports Disponibles
 
 ```javascript
-import { createTooth, TOOTH_TYPES } from 'op-odontogram';
+import { 
+  // Componentes
+  Odontogram,
+  DetailedToothComponent,
+  
+  // Tipos
+  Tooth,
+  ToothStatus,
+  ToothProcedure,
+  ToothSurface,
+  ToothRenderProps,
+  OdontogramProps,
+  
+  // Datos iniciales
+  initialPermanentTeeth,
+  initialTemporaryTeeth,
+  
+  // Constantes
+  TOOTH_TYPES,
+  TOOTH_GROUPS,
+  
+  // Utilidades
+  createTooth,
+  
+  // Configuración de layout
+  toothLayoutConfig,
+  getToothVerticalOffset,
+  
+  // Casos clínicos (próximamente)
+  // clinicalCases,
+  // getClinicalCaseById,
+  // getClinicalCasesByCategory
+} from 'op-odontogram';
 
 // Crear un nuevo diente
 const newTooth = createTooth(11, 1, 1, {
@@ -225,7 +419,19 @@ const newTooth = createTooth(11, 1, 1, {
 
 // Obtener el nombre del tipo de diente
 const toothName = TOOTH_TYPES.PERMANENT[1]; // "Incisivo central"
+
+// Obtener offset vertical de un diente
+const offset = getToothVerticalOffset(11); // 20
 ```
+
+## ⚠️ Nota de Migración
+
+Si estás actualizando desde una versión anterior:
+
+1. **verticalOffset** ha sido removido de la interfaz Tooth
+2. Los valores de posicionamiento ahora están en `toothLayoutConfig`
+3. El estado `not_erupted` ha sido agregado para casos pediátricos
+4. Nuevas props requeridas en Odontogram (ver tabla de props)
 
 ## 📝 Licencia
 
