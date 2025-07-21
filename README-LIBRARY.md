@@ -237,7 +237,7 @@ Si usas esta librería en tu proyecto, se agradece (pero no es obligatorio) incl
 
 ```
 Odontograma creado con op-odontogram
-https://github.com/tu-usuario/op-odontogram
+https://github.com/pedroinformatico/op-odontorgram
 ```
 
 ## 🤝 Contribuciones
@@ -262,4 +262,4 @@ Si encuentras algún problema, por favor abre un issue en GitHub describiendo:
 
 Pedro Hernández Letelier - [@tu-twitter](https://twitter.com/tu-twitter)
 
-Link del Proyecto: [https://github.com/tu-usuario/op-odontogram](https://github.com/tu-usuario/op-odontogram)
+Link del Proyecto: [https://github.com/pedroinformatico/op-odontorgram](https://github.com/pedroinformatico/op-odontorgram)

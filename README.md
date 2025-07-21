@@ -26,7 +26,7 @@
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/op-odontogram.git
+git clone https://github.com/pedroinformatico/op-odontorgram.git
 
 # Navegar al directorio
 cd op-odontogram
@@ -84,8 +84,8 @@ La aplicación incluye:
 ### ¿Necesitas ayuda?
 
 - 📖 [Documentación completa](README-LIBRARY.md)
-- 🐛 [Reportar problemas](https://github.com/tu-usuario/op-odontogram/issues)
-- 💬 [Discusiones](https://github.com/tu-usuario/op-odontogram/discussions)
+- 🐛 [Reportar problemas](https://github.com/pedroinformatico/op-odontorgram/issues)
+- 💬 [Discusiones](https://github.com/pedroinformatico/op-odontorgram/discussions)
 
 ## Colaboradores
 

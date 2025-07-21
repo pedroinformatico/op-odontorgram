@@ -1,7 +1,7 @@
 {
   "name": "op-odontogram",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Una librería de React para crear odontogramas dentales interactivos",
   "keywords": [
@@ -17,13 +17,13 @@
   ],
   "author": "Pedro Hernández Letelier",
   "license": "MIT",
-  "homepage": "https://github.com/pedroinformatico/op-odontogram-public#readme",
+  "homepage": "https://github.com/pedroinformatico/op-odontorgram#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pedroinformatico/op-odontogram-public.git"
+    "url": "git+https://github.com/pedroinformatico/op-odontorgram.git"
   },
   "bugs": {
-    "url": "https://github.com/pedroinformatico/op-odontogram-public/issues"
+    "url": "https://github.com/pedroinformatico/op-odontorgram/issues"
   },
   "main": "dist/index.js",
   "module": "dist/index.es.js",
