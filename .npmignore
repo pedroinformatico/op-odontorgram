@@ -1,0 +1,17 @@
+src/
+node_modules/
+.git/
+.gitignore
+.eslintrc*
+eslint.config.js
+vite.config.ts
+tsconfig*.json
+tailwind.config.js
+postcss.config.js
+index.html
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+.vscode/
+.idea/

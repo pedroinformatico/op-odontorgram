@@ -17,26 +17,39 @@
   ],
   "author": "Pedro Hernández Letelier",
   "license": "MIT",
-  "homepage": "https://github.com/pedroinformatico/op-odontorgram#readme",
+  "homepage": "https://github.com/pedroinformatico/op-odontogram-public#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pedroinformatico/op-odontorgram.git"
+    "url": "git+https://github.com/pedroinformatico/op-odontogram-public.git"
   },
   "bugs": {
-    "url": "https://github.com/pedroinformatico/op-odontorgram/issues"
+    "url": "https://github.com/pedroinformatico/op-odontogram-public/issues"
   },
-  "main": "src/lib/odontograma/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && tsc",
+    "build:lib": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
-    "daisyui": "^5.0.46",
-    "lucide-react": "^0.344.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "lucide-react": "^0.344.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "optionalDependencies": {
+    "daisyui": "^5.0.46"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
