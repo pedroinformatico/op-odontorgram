@@ -9,7 +9,7 @@ interface ColorLegendProps {
 }
 
 export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '', theme }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   // Determinar si estamos en modo oscuro para los estilos condicionales
   const isDarkMode = theme === 'dark';
