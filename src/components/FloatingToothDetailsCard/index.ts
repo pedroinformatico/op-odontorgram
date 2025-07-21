@@ -1,0 +1,1 @@
+export { FloatingToothDetailsCard } from './FloatingToothDetailsCard';

@@ -1,0 +1,94 @@
+/* FloatingToothDetailsCard Styles - Minimal necessary styles */
+
+/* Animation for state changes */
+.tooth-state-transition {
+  transition: all 0.3s ease;
+}
+
+/* Status indicator animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.status-indicator {
+  animation: pulse 2s infinite;
+}
+
+/* Note indicator */
+.has-notes-indicator {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: var(--info);
+  border-radius: 50%;
+  border: 2px solid var(--surface-primary);
+}
+
+/* Procedure count badge */
+.procedure-count {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--accent);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: bold;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+/* Surface selector improvements */
+.surface-selector svg rect {
+  transition: all 0.2s ease;
+}
+
+.surface-selector svg rect:hover {
+  filter: brightness(0.9);
+  stroke-width: 3px !important;
+}
+
+/* Save animation */
+@keyframes save-success {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.save-success {
+  animation: save-success 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .tooth-detail-tabs {
+    padding: 0.75rem;
+  }
+  
+  .tab-button {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
+  
+  .tab-button span {
+    display: none;
+  }
+  
+  .tooth-detail-content {
+    padding: 0.75rem;
+  }
+}

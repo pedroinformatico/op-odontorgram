@@ -1,0 +1,533 @@
+/* Odontogram Container */
+.odontogram-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.odontogram-grid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.odontogram-columns {
+  display: flex;
+  gap: 0.5rem;
+  scale: 0.75;
+}
+
+@media (min-width: 640px) {
+  .odontogram-columns {
+    scale: 0.9;
+  }
+}
+
+@media (min-width: 1024px) {
+  .odontogram-columns {
+    scale: 1;
+  }
+}
+
+.odontogram-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.odontogram-group {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.odontogram-group-upper {
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.odontogram-group-lower {
+  margin-top: 2rem;
+}
+
+.odontogram-group-temporary {
+  height: 5.625rem;
+  transition: all 0.3s;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.odontogram-teeth {
+  display: flex;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .odontogram-teeth {
+    gap: 0.375rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .odontogram-teeth {
+    gap: 0.5rem;
+  }
+}
+
+.odontogram-teeth-anterior {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.odontogram-teeth-section {
+  display: flex;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .odontogram-teeth-section {
+    gap: 0.375rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .odontogram-teeth-section {
+    gap: 0.5rem;
+  }
+}
+
+.odontogram-midline {
+  width: 2px;
+  height: 4rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  margin: 0 1.5rem;
+}
+
+.odontogram-midline-temporary {
+  height: 3rem;
+  background-color: rgba(251, 146, 60, 0.3);
+}
+
+/* Tooth Component Styles */
+.tooth-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tooth-number {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tooth-number-permanent {
+  color: #4a5568;
+}
+
+.tooth-number-temporary {
+  color: #f97316;
+}
+
+/* Tooth Roots */
+.tooth-roots {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.tooth-roots-upper {
+  height: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.tooth-roots-lower {
+  height: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .tooth-roots-upper,
+  .tooth-roots-lower {
+    height: 1rem;
+  }
+}
+
+.tooth-roots-container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tooth-root {
+  border: 2px solid;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tooth-root-single {
+  width: 0.375rem;
+  height: 0.75rem;
+}
+
+.tooth-root-double {
+  width: 0.25rem;
+  height: 0.75rem;
+}
+
+.tooth-root-triple {
+  width: 0.125rem;
+  height: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .tooth-root-single {
+    width: 0.5rem;
+    height: 1rem;
+  }
+  
+  .tooth-root-double {
+    width: 0.375rem;
+    height: 1rem;
+  }
+  
+  .tooth-root-triple {
+    width: 0.25rem;
+    height: 1rem;
+  }
+}
+
+.tooth-roots-upper .tooth-root {
+  border-bottom: 0;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.tooth-roots-lower .tooth-root {
+  border-top: 0;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.tooth-root-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Tooth Crown Container */
+.tooth-crown-container {
+  position: relative;
+}
+
+/* Tooth Sizes */
+.tooth-size-permanent-frontal {
+  width: 2rem;
+  height: 3rem;
+}
+
+.tooth-size-permanent-premolar {
+  width: 2.25rem;
+  height: 3.5rem;
+}
+
+.tooth-size-permanent-molar {
+  width: 2.5rem;
+  height: 4rem;
+}
+
+.tooth-size-temporary-frontal {
+  width: 1.5rem;
+  height: 2.5rem;
+}
+
+.tooth-size-temporary-premolar {
+  width: 1.75rem;
+  height: 3rem;
+}
+
+.tooth-size-temporary-molar {
+  width: 2rem;
+  height: 3.5rem;
+}
+
+@media (min-width: 640px) {
+  .tooth-size-permanent-frontal {
+    width: 2.5rem;
+    height: 4rem;
+  }
+  
+  .tooth-size-permanent-premolar {
+    width: 2.75rem;
+    height: 4.5rem;
+  }
+  
+  .tooth-size-permanent-molar {
+    width: 3rem;
+    height: 5rem;
+  }
+  
+  .tooth-size-temporary-frontal {
+    width: 2rem;
+    height: 3rem;
+  }
+  
+  .tooth-size-temporary-premolar {
+    width: 2.25rem;
+    height: 3.5rem;
+  }
+  
+  .tooth-size-temporary-molar {
+    width: 2.5rem;
+    height: 4rem;
+  }
+}
+
+/* Tooth Crown */
+.tooth-crown {
+  width: 100%;
+  height: 2rem;
+  border: 2px solid;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .tooth-crown {
+    height: 3rem;
+  }
+}
+
+.tooth-crown:hover:not(.tooth-extracted) {
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooth Shapes */
+.tooth-shape-frontal-upper {
+  border-radius: 0.75rem 0.75rem 9999px 9999px;
+}
+
+.tooth-shape-frontal-lower {
+  border-radius: 9999px 9999px 0.75rem 0.75rem;
+}
+
+.tooth-shape-premolar {
+  border-radius: 0.75rem;
+}
+
+.tooth-shape-molar {
+  border-radius: 0.5rem;
+}
+
+/* Tooth Status Styles */
+.tooth-permanent {
+  background-color: #f3f4f6;
+}
+
+.tooth-temporary {
+  background-color: #fed7aa;
+}
+
+.tooth-status-healthy {
+  background-color: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.tooth-status-caries {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.tooth-status-filled {
+  background-color: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e3a8a;
+}
+
+.tooth-status-crown {
+  background-color: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.tooth-status-extracted {
+  background-color: #e5e7eb;
+  border-color: #6b7280;
+  color: #374151;
+}
+
+.tooth-status-implant {
+  background-color: #e0e7ff;
+  border-color: #6366f1;
+  color: #312e81;
+}
+
+.tooth-status-root_canal {
+  background-color: #f3e8ff;
+  border-color: #a855f7;
+  color: #581c87;
+}
+
+.tooth-status-fracture {
+  background-color: #fed7aa;
+  border-color: #ea580c;
+  color: #7c2d12;
+}
+
+.tooth-status-bridge {
+  background-color: #f3e8ff;
+  border-color: #a855f7;
+  color: #6b21a8;
+}
+
+.tooth-status-extraction_indicated {
+  background-color: #fecaca;
+  border-color: #dc2626;
+  color: #7f1d1d;
+}
+
+/* Selected Tooth */
+.tooth-selected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #4a5568;
+}
+
+/* Extracted Tooth */
+.tooth-extracted {
+  opacity: 0.4;
+}
+
+/* Tooth Surfaces */
+.tooth-surfaces {
+  position: absolute;
+  inset: 0.125rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.125rem;
+}
+
+.tooth-surface {
+  border-radius: 0.125rem;
+  border: 1px solid;
+}
+
+.tooth-surface-vestibular {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.tooth-surface-mesial {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.tooth-surface-oclusal {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.tooth-surface-distal {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.tooth-surface-lingual {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.tooth-surface-temporary {
+  border-color: #fb923c;
+}
+
+.tooth-surface-healthy {
+  background-color: rgba(16, 185, 129, 0.4);
+  border-color: #10b981;
+}
+
+.tooth-surface-caries {
+  background-color: rgba(239, 68, 68, 0.4);
+  border-color: #ef4444;
+}
+
+.tooth-surface-filled {
+  background-color: rgba(59, 130, 246, 0.4);
+  border-color: #3b82f6;
+}
+
+.tooth-surface-crown {
+  background-color: rgba(245, 158, 11, 0.4);
+  border-color: #f59e0b;
+}
+
+.tooth-surface-extracted {
+  background-color: rgba(107, 114, 128, 0.4);
+  border-color: #6b7280;
+}
+
+.tooth-surface-implant {
+  background-color: rgba(99, 102, 241, 0.4);
+  border-color: #6366f1;
+}
+
+.tooth-surface-root_canal {
+  background-color: rgba(168, 85, 247, 0.4);
+  border-color: #a855f7;
+}
+
+.tooth-surface-fracture {
+  background-color: rgba(234, 88, 12, 0.4);
+  border-color: #ea580c;
+}
+
+.tooth-surface-bridge {
+  background-color: rgba(168, 85, 247, 0.4);
+  border-color: #a855f7;
+}
+
+.tooth-surface-extraction_indicated {
+  background-color: rgba(220, 38, 38, 0.4);
+  border-color: #dc2626;
+}
+
+/* Extraction Mark */
+.tooth-extraction-mark,
+.tooth-extraction-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooth-extraction-line {
+  position: absolute;
+  width: 100%;
+  max-width: 1.25rem;
+  height: 0.125rem;
+  background-color: #ef4444;
+}
+
+.tooth-extraction-line-1 {
+  transform: rotate(45deg);
+}
+
+.tooth-extraction-line-2 {
+  transform: rotate(-45deg);
+}
+
+.tooth-extraction-overlay .tooth-extraction-line {
+  width: 2.5rem;
+}

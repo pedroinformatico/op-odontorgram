@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS para el sistema de diseño */
+:root {
+  /* Surfaces */
+  --surface-primary: #FFFFFF;
+  --surface-secondary: #F5F5F5;
+  --surface-tertiary: #EBEBEB;
+  
+  /* Text */
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  
+  /* Accent */
+  --accent: #2196F3;
+  --accent-hover: #1976D2;
+  
+  /* Tooth States */
+  --tooth-normal: #FFF9E6;
+  --tooth-caries: #FF5252;
+  --tooth-filled: #4CAF50;
+  --tooth-implant: #9E9E9E;
+  
+  /* Borders */
+  --border-color: #E0E0E0;
+  
+  /* Status Colors */
+  --success: #4CAF50;
+  --error: #FF5252;
+  --warning: #FFC107;
+  --info: #2196F3;
+  
+  /* Additional colors for floating panel */
+  --surface-hover: #F0F0F0;
+  --accent-light: #E3F2FD;
+  --success-light: #E8F5E9;
+  --error-light: #FFEBEE;
+  --info-light: #E3F2FD;
+  --neutral: #9E9E9E;
+  --primary: #9C27B0;
+  --secondary: #E91E63;
+}
+
+/* Modo Oscuro */
+:root[data-theme="dark"] {
+  /* Surfaces */
+  --surface-primary: #1E1E1E;
+  --surface-secondary: #2D2D2D;
+  --surface-tertiary: #3A3A3A;
+  
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --text-tertiary: #808080;
+  
+  /* Accent */
+  --accent: #64B5F6;
+  --accent-hover: #42A5F5;
+  
+  /* Tooth States */
+  --tooth-normal: #F5E6B3;
+  --tooth-caries: #EF5350;
+  --tooth-filled: #66BB6A;
+  --tooth-implant: #BDBDBD;
+  
+  /* Borders */
+  --border-color: #404040;
+}
+
+/* Clases utilitarias personalizadas */
+.bg-surface-primary {
+  background-color: var(--surface-primary);
+}
+
+.bg-surface-secondary {
+  background-color: var(--surface-secondary);
+}
+
+.bg-surface-tertiary {
+  background-color: var(--surface-tertiary);
+}
+
+.text-text-primary {
+  color: var(--text-primary);
+}
+
+.text-text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.border-border-color {
+  border-color: var(--border-color);
+}
+
+.bg-accent\/10 {
+  background-color: rgb(from var(--accent) r g b / 0.1);
+}
+
+.hover\:bg-accent-hover:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Transiciones por defecto */
+.transition-default {
+  transition: all 0.2s ease-in-out;
+}
+
+.transition-fast {
+  transition: all 0.1s ease-in-out;
+}
+
+/* Estilos para elementos específicos */
+.h-15 {
+  height: 3.75rem; /* 60px */
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Estados de focus mejorados */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Animaciones sutiles */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Efectos de hover para botones */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Estilos para estados de dientes */
+.bg-success\/20 {
+  background-color: rgb(from var(--success) r g b / 0.2);
+}
+
+.bg-error\/20 {
+  background-color: rgb(from var(--error) r g b / 0.2);
+}
+
+.bg-warning\/20 {
+  background-color: rgb(from var(--warning) r g b / 0.2);
+}
+
+.bg-info\/20 {
+  background-color: rgb(from var(--info) r g b / 0.2);
+}
+
+.border-success {
+  border-color: var(--success);
+}
+
+.border-error {
+  border-color: var(--error);
+}
+
+.border-warning {
+  border-color: var(--warning);
+}
+
+.border-info {
+  border-color: var(--info);
+}
+
+/* Tipografía */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
