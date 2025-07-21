@@ -36,7 +36,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
-    "build:lib": "vite build",
+    "build:lib": "vite build --mode lib",
+    "build:demo": "GITHUB_PAGES=true vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepublishOnly": "npm run build:lib"
