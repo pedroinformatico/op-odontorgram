@@ -1,114 +1,140 @@
 import React, { useState, useEffect } from 'react';
-import { Info, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Info, ChevronUp, ChevronDown } from 'lucide-react';
 import { DetailedToothComponent } from '../lib/odontograma/components/DetailedToothComponent';
 import { Tooth } from '../lib/odontograma/types';
 
 interface ColorLegendProps {
   className?: string;
+  theme: 'light' | 'dark'; // <-- AHORA RECIBE DIRECTAMENTE EL TEMA
 }
 
-export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '' }) => {
+export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '', theme }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(() => {
     const stored = localStorage.getItem('colorLegendExpanded');
-    return stored ? JSON.parse(stored) : false;
+    return stored ? JSON.parse(stored) : true; 
   });
 
   useEffect(() => {
     localStorage.setItem('colorLegendExpanded', JSON.stringify(isExpanded));
   }, [isExpanded]);
 
-  // Crear dientes de ejemplo para la leyenda
-  const sampleTeeth: { tooth: Tooth; label: string }[] = [
+  // Determinar si estamos en modo oscuro para los estilos condicionales
+  const isDarkMode = theme === 'dark';
+
+  const sampleTeeth: { tooth: Tooth; label: string; chipColorClass: string }[] = [
     {
-      tooth: { id: 1, clinicalId: '1.1', quadrant: 1, position: 1, status: 'healthy' },
-      label: 'Sano'
+      tooth: { id: 1, clinicalId: '1.1', quadrant: 1, position: 1, status: 'healthy', surfaces: { mesial: 'healthy', distal: 'healthy', buccal: 'healthy', lingual: 'healthy', occlusal: 'healthy' } },
+      label: 'Sano',
+      chipColorClass: 'bg-green-600'
     },
     {
-      tooth: { id: 2, clinicalId: '1.2', quadrant: 1, position: 2, status: 'caries' },
-      label: 'Caries'
+      tooth: { id: 2, clinicalId: '1.2', quadrant: 1, position: 2, status: 'caries', surfaces: { mesial: 'healthy', distal: 'caries', buccal: 'healthy', lingual: 'healthy', occlusal: 'caries' } },
+      label: 'Caries',
+      chipColorClass: 'bg-red-600'
     },
     {
-      tooth: { id: 3, clinicalId: '1.3', quadrant: 1, position: 3, status: 'filled' },
-      label: 'Obturado'
+      tooth: { id: 3, clinicalId: '1.3', quadrant: 1, position: 3, status: 'filled', surfaces: { mesial: 'filled', distal: 'healthy', buccal: 'healthy', lingual: 'healthy', occlusal: 'filled' } },
+      label: 'Obturado',
+      chipColorClass: 'bg-yellow-600'
     },
     {
-      tooth: { id: 4, clinicalId: '1.4', quadrant: 1, position: 4, status: 'crown' },
-      label: 'Corona'
+      tooth: { id: 4, clinicalId: '1.4', quadrant: 1, position: 4, status: 'crown', surfaces: { mesial: 'crown', distal: 'crown', buccal: 'crown', lingual: 'crown', occlusal: 'crown' } },
+      label: 'Corona',
+      chipColorClass: 'bg-purple-600'
     },
     {
-      tooth: { id: 5, clinicalId: '1.5', quadrant: 1, position: 5, status: 'extracted' },
-      label: 'Extraído'
+      tooth: { id: 5, clinicalId: '1.5', quadrant: 1, position: 5, status: 'extracted', surfaces: { mesial: 'extracted', distal: 'extracted', buccal: 'extracted', lingual: 'extracted', occlusal: 'extracted' } },
+      label: 'Extraído',
+      chipColorClass: 'bg-gray-600'
     },
     {
-      tooth: { id: 6, clinicalId: '1.6', quadrant: 1, position: 6, status: 'root_canal' },
-      label: 'Endodoncia'
+      tooth: { id: 6, clinicalId: '1.6', quadrant: 1, position: 6, status: 'root_canal', surfaces: { mesial: 'root_canal', distal: 'root_canal', buccal: 'root_canal', lingual: 'root_canal', occlusal: 'root_canal' } },
+      label: 'Endodoncia',
+      chipColorClass: 'bg-indigo-600'
     },
     {
-      tooth: { id: 7, clinicalId: '1.7', quadrant: 1, position: 7, status: 'implant' },
-      label: 'Implante'
+      tooth: { id: 7, clinicalId: '1.7', quadrant: 1, position: 7, status: 'implant', surfaces: { mesial: 'implant', distal: 'implant', buccal: 'implant', lingual: 'implant', occlusal: 'implant' } },
+      label: 'Implante',
+      chipColorClass: 'bg-blue-600'
     },
     {
-      tooth: { id: 8, clinicalId: '1.8', quadrant: 1, position: 8, status: 'fracture' },
-      label: 'Fractura'
+      tooth: { id: 8, clinicalId: '1.8', quadrant: 1, position: 8, status: 'fracture', surfaces: { mesial: 'fracture', distal: 'fracture', buccal: 'fracture', lingual: 'fracture', occlusal: 'fracture' } },
+      label: 'Fractura',
+      chipColorClass: 'bg-orange-600'
     },
     {
-      tooth: { id: 9, clinicalId: '2.1', quadrant: 2, position: 1, status: 'not_erupted' },
-      label: 'No erupcionado'
+      tooth: { id: 9, clinicalId: '2.1', quadrant: 2, position: 1, status: 'not_erupted', surfaces: { mesial: 'not_erupted', distal: 'not_erupted', buccal: 'not_erupted', lingual: 'not_erupted', occlusal: 'not_erupted' } },
+      label: 'No erupcionado',
+      chipColorClass: 'bg-teal-600'
     }
   ];
 
   return (
-    <div className={`${className}`}>
-      {/* Panel expandible fijo */}
-      <div className={`transition-all duration-300 rounded-lg overflow-hidden ${
-        isExpanded ? 'bg-gray-100 dark:bg-gray-800/20 border border-gray-200 dark:border-gray-700' : ''
-      }`}>
-        {/* Botón toggle */}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className={`w-full flex items-center justify-between gap-2 px-3 py-2 transition-colors text-xs font-medium ${
-            isExpanded 
-              ? 'bg-gray-200 dark:bg-gray-700/30 hover:bg-gray-300 dark:hover:bg-gray-700/50' 
-              : 'bg-base-200 hover:bg-base-300'
-          } rounded-lg`}
-          aria-label={isExpanded ? 'Ocultar leyenda' : 'Mostrar leyenda'}
-        >
-          <div className="flex items-center gap-2">
-            <Info className="w-3.5 h-3.5" />
-            <span>Leyenda de estados dentales</span>
-          </div>
-          {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-        </button>
+    // Contenedor Principal del Panel de Leyenda
+    // Fondo: Blanco en modo claro, gris-900 en modo oscuro (o el color de tu fondo de app oscuro)
+    // Sombra: Más pronunciada en ambos modos
+    // Borde: Visible en ambos modos
+    <div className={`${className} 
+      ${isDarkMode ? 'bg-gray-900 shadow-xl border-gray-700' : 'bg-white shadow-lg border-gray-200'}
+      rounded-lg border`}> 
+      
+      {/* Botón Toggle del Panel */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className={`w-full flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold 
+          ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'text-gray-800 hover:bg-gray-50'}
+          transition-colors rounded-t-lg`}
+        aria-label={isExpanded ? 'Ocultar leyenda' : 'Mostrar leyenda'}
+      >
+        <div className="flex items-center gap-2">
+          <Info className={`w-4 h-4 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} /> 
+          <span>Leyenda de estados dentales</span>
+        </div>
+        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </button>
 
-        {/* Contenido expandible */}
-        <div className={`transition-all duration-300 ${
-          isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
-          <div className="p-4">
-            {/* Grid de dientes reales */}
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
-              {sampleTeeth.map(({ tooth, label }) => (
-                <div key={tooth.id} className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-white/50 dark:hover:bg-black/20 transition-colors">
-                  <div className="scale-[0.65] origin-center" style={{ width: '45px', height: '55px' }}>
+      {/* Contenido Expandible */}
+      <div className={`transition-all duration-300 overflow-hidden ${
+        isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <div className="p-4 pt-0"> 
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
+            {sampleTeeth.map(({ tooth, label, chipColorClass }) => (
+              // Mini-card individual para cada diente de la leyenda
+              // Fondo: Blanco en modo claro, gris-850 en modo oscuro
+              // Borde: Adaptable
+              <div
+                key={tooth.id}
+                className={`flex flex-col items-center justify-between 
+                           ${isDarkMode ? 'bg-gray-850 border-gray-700 shadow-md' : 'bg-white border-gray-200 shadow-sm'}
+                           rounded-lg border p-2`} 
+              >
+                <div className="flex-grow flex items-center justify-center py-2"> 
+                  <div className="scale-[0.75] origin-center" style={{ width: '50px', height: '60px' }}> 
                     <DetailedToothComponent
                       tooth={tooth}
                       isSelected={false}
                       onClick={() => {}}
                       showBiteEffect={false}
-                      isTemporary={false}
+                      isTemporary={false} 
+                      isDarkMode={isDarkMode} // <-- ESENCIAL: Pasar el modo a DetailedToothComponent
                     />
                   </div>
-                  <span className="text-[11px] text-center font-medium text-base-content/80">{label}</span>
                 </div>
-              ))}
-            </div>
+                {/* Chip de label con color definido por prop */}
+                <div className={`w-full px-1 py-0.5 mt-2 rounded-md text-white text-center text-[10px] font-medium leading-none ${chipColorClass}`}> 
+                  {label}
+                </div>
+              </div>
+            ))}
+          </div>
 
-            {/* Nota informativa */}
-            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-base-content/60 text-center">
-                Sistema FDI • Pasa el cursor sobre cualquier diente para ver información detallada
-              </p>
-            </div>
+          {/* Nota informativa */}
+          <div className="mt-5 pt-4 border-t 
+            ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}">
+            <p className={`text-xs text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Sistema FDI • Pasa el cursor sobre cualquier diente para ver información detallada
+            </p>
           </div>
         </div>
       </div>
