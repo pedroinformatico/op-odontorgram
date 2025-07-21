@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Info, ChevronUp, ChevronDown } from 'lucide-react';
 import { DetailedToothComponent } from '../lib/odontograma/components/DetailedToothComponent';
 import { Tooth } from '../lib/odontograma/types';
@@ -9,14 +9,7 @@ interface ColorLegendProps {
 }
 
 export const ColorLegend: React.FC<ColorLegendProps> = ({ className = '', theme }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(() => {
-    const stored = localStorage.getItem('colorLegendExpanded');
-    return stored ? JSON.parse(stored) : true; 
-  });
-
-  useEffect(() => {
-    localStorage.setItem('colorLegendExpanded', JSON.stringify(isExpanded));
-  }, [isExpanded]);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   // Determinar si estamos en modo oscuro para los estilos condicionales
   const isDarkMode = theme === 'dark';

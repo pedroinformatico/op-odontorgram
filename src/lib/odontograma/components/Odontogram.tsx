@@ -79,9 +79,9 @@ export const Odontogram: React.FC<OdontogramProps> = ({
             Odontograma {showTemporaryTeeth ? 'Mixto' : 'Adulto'}
           </h2>
           
-          {/* Toggle compacto para dientes de leche */}
+          {/* Toggle compacto para dientes temporales */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-text-secondary">Dientes de leche</span>
+            <span className="text-xs text-text-secondary">Dientes temporales</span>
             <button
               onClick={() => onToggleTemporaryTeeth(!showTemporaryTeeth)}
               className={`w-10 h-5 rounded-full transition-colors relative ${
@@ -107,23 +107,6 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               20 dientes temporales
             </div>
           )}
-          
-          {/* Bite Effect Button */}
-          <button
-            onClick={() => onToggleBiteEffect(!showBiteEffect)}
-            className={`btn btn-sm ${showBiteEffect ? 'btn-accent' : 'btn-outline btn-accent'}`}
-          >
-            {showBiteEffect ? '🦷 Cerrar' : '😮 Abrir'}
-          </button>
-          
-          {/* Simulate Bite Animation Button */}
-          <button
-            onClick={onSimulateBite}
-            disabled={isAnimatingBite}
-            className={`btn btn-sm ${isAnimatingBite ? 'btn-disabled' : 'btn-outline btn-primary'}`}
-          >
-            {isAnimatingBite ? '🦷 Mordiendo...' : '🦷 Simular Mordida'}
-          </button>
         </div>
       </div>
       

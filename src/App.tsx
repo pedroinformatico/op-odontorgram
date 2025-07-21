@@ -5,7 +5,6 @@ import { PatientHeader } from './components/PatientHeader';
 import { FloatingToothDetailsCard } from './components/FloatingToothDetailsCard';
 import { ColorLegend } from './components/ColorLegend';
 import { CompactCaseSelector } from './components/CompactCaseSelector';
-import { useLocalStorage } from './hooks/useLocalStorage';
 import { getClinicalCaseById } from './data/clinicalCases';
 
 // Importar desde la librería
@@ -13,10 +12,10 @@ import { Odontogram, Tooth, initialPermanentTeeth, initialTemporaryTeeth } from 
 import './lib/odontograma/styles/odontogram.css';
 
 function App() {
-  const [teeth, setTeeth] = useLocalStorage<Tooth[]>('odontogram-teeth', initialPermanentTeeth);
-  const [tempTeeth, setTempTeeth] = useLocalStorage<Tooth[]>('odontogram-temp-teeth', initialTemporaryTeeth);
-  const [showTemporaryTeeth, setShowTemporaryTeeth] = useLocalStorage<boolean>('show-temporary-teeth', false);
-  const [patient, setPatient] = useLocalStorage<Patient>('odontogram-patient', {
+  const [teeth, setTeeth] = useState<Tooth[]>(initialPermanentTeeth);
+  const [tempTeeth, setTempTeeth] = useState<Tooth[]>(initialTemporaryTeeth);
+  const [showTemporaryTeeth, setShowTemporaryTeeth] = useState<boolean>(false);
+  const [patient, setPatient] = useState<Patient>({
     name: '',
     age: 0,
     lastVisit: new Date().toISOString().split('T')[0]
@@ -25,6 +24,7 @@ function App() {
   const [showBiteEffect, setShowBiteEffect] = useState<boolean>(true); // Empezar abierto
   const [isAnimatingBite, setIsAnimatingBite] = useState<boolean>(false);
   const [selectedCaseId, setSelectedCaseId] = useState<string>('empty');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const handleToothClick = (tooth: Tooth, event?: React.MouseEvent) => {
     setSelectedTooth(tooth);
@@ -155,29 +155,6 @@ function App() {
     }
   };
 
-  const handleResetOdontogram = () => {
-    // Pedir confirmación antes de resetear
-    if (!confirm('¿Estás seguro de que quieres resetear todo el odontograma? Se perderán todos los cambios realizados.')) {
-      return;
-    }
-    
-    // Resetear los dientes a su estado inicial
-    setTeeth(initialPermanentTeeth);
-    setTempTeeth(initialTemporaryTeeth);
-    setSelectedCaseId('empty');
-    
-    // Limpiar selección
-    setSelectedTooth(null);
-    
-    // Opcional: Limpiar también los datos del paciente
-    setPatient({
-      name: '',
-      age: 0,
-      lastVisit: new Date().toISOString().split('T')[0]
-    });
-  };
-
-
   return (
     <div className="min-h-screen bg-surface-primary text-text-primary">
       {/* Header del Paciente */}
@@ -220,18 +197,7 @@ function App() {
               
               {/* Leyenda de colores y símbolos */}
               <div className="mt-4">
-                <ColorLegend />
-              </div>
-              
-              {/* Botón de reset */}
-              <div className="mt-4 flex justify-center">
-                <button
-                  onClick={handleResetOdontogram}
-                  className="btn btn-error btn-sm"
-                  title="Resetear todos los dientes a su estado inicial"
-                >
-                  🔄 Resetear Odontograma
-                </button>
+                <ColorLegend theme={theme} />
               </div>
             </div>
           </div>

@@ -10,15 +10,12 @@ interface PatientHeaderProps {
 export const PatientHeader: React.FC<PatientHeaderProps> = ({ patient, onPatientChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPatient, setEditedPatient] = useState(patient);
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
-  });
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
   };
 
   const handleSave = () => {

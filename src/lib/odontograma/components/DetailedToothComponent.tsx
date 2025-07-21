@@ -136,15 +136,15 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
 
   return (
     <div 
-      className="relative group flex flex-col items-center"
+      className={`relative group flex flex-col items-center ${tooth.notes ? 'tooltip tooltip-top before:max-w-xs before:whitespace-pre-wrap' : ''}`}
       style={{ transform: `translateY(${verticalOffset}px)` }}
+      data-tip={tooth.notes || ''}
     >
-      {/* Número del diente con tooltip */}
-      <div className={`tooltip tooltip-top mb-1 ${tooth.demoLabel ? 'before:max-w-xs before:whitespace-pre-wrap' : ''}`} 
-           data-tip={tooth.demoLabel || ''}>
+      {/* Número del diente */}
+      <div className="mb-1">
         <div className={`text-xs font-bold flex items-center gap-1 ${isTemporary ? 'text-orange-500' : 'text-accent'}`}>
           <span>{tooth.clinicalId || tooth.id}</span>
-          {tooth.demoLabel && (
+          {tooth.notes && (
             <span className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
           )}
         </div>
