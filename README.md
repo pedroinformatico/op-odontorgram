@@ -6,10 +6,13 @@
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646cff.svg)](https://vitejs.dev/)
+[![Beta](https://img.shields.io/badge/Status-Beta-yellow.svg)]()
 
 ## Descripción
 
 **OP Odontogram** es una librería de React para crear odontogramas dentales interactivos. Permite visualizar y gestionar el estado de dientes permanentes y temporales con una interfaz moderna e intuitiva.
+
+> ⚠️ **Nota**: Esta librería está actualmente en versión beta. La API puede cambiar en futuras versiones.
 
 ## Características
 

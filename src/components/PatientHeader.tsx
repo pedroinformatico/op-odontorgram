@@ -5,20 +5,18 @@ import { Patient } from '../types/dental';
 interface PatientHeaderProps {
   patient: Patient;
   onPatientChange: (patient: Patient) => void;
+  theme: 'light' | 'dark';
+  onThemeChange: (theme: 'light' | 'dark') => void;
 }
 
-export const PatientHeader: React.FC<PatientHeaderProps> = ({ patient, onPatientChange }) => {
+export const PatientHeader: React.FC<PatientHeaderProps> = ({ patient, onPatientChange, theme, onThemeChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPatient, setEditedPatient] = useState(patient);
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
-  });
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    onThemeChange(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
   };
 
   const handleSave = () => {

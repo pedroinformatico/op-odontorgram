@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tooth, ToothStatus } from '../types';
+import { getToothVerticalOffset } from '../config/layoutConfig';
 import { Check, AlertCircle, CircleDot, Crown, X, Plus, Zap, AlertTriangle as TriangleAlert, Link, AlertOctagon } from 'lucide-react';
 
 export interface DetailedToothComponentProps {
@@ -8,6 +9,7 @@ export interface DetailedToothComponentProps {
   onToothClick: (tooth: Tooth, event?: React.MouseEvent) => void;
   isUpper: boolean;
   isTemporary?: boolean;
+  isDarkMode?: boolean;
 }
 
 const statusIcons = {
@@ -21,6 +23,7 @@ const statusIcons = {
   fracture: TriangleAlert,
   bridge: Link,
   extraction_indicated: AlertOctagon,
+  not_erupted: undefined,
 };
 
 export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({ 
@@ -28,70 +31,136 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   isSelected,
   onToothClick, 
   isUpper,
-  isTemporary = false
+  isTemporary = false,
+  isDarkMode = false
 }) => {
   const getToothStyle = (status: ToothStatus) => {
-    const baseStyles = {
+    const baseStyles = isDarkMode ? {
+      healthy: 'border-green-700 text-green-300',
+      caries: 'border-red-700 text-red-300',
+      filled: 'border-blue-700 text-blue-300',
+      crown: 'border-amber-700 text-amber-300',
+      extracted: 'border-gray-600 text-gray-400',
+      implant: 'border-purple-700 text-purple-300',
+      root_canal: 'border-pink-700 text-pink-300',
+      fracture: 'border-orange-700 text-orange-300',
+      bridge: 'border-indigo-700 text-indigo-300',
+      extraction_indicated: 'border-red-800 text-red-400',
+      not_erupted: 'border-gray-600 text-gray-500',
+    } : {
       healthy: 'border-success text-success-content',
       caries: 'border-error text-error-content',
       filled: 'border-info text-info-content',
       crown: 'border-warning text-warning-content',
-      extracted: 'border-neutral text-neutral-content',
+      extracted: 'border-gray-500 text-gray-700',
       implant: 'border-primary text-primary-content',
       root_canal: 'border-secondary text-secondary-content',
       fracture: 'border-accent text-accent-content',
       bridge: 'border-purple-500 text-purple-600',
       extraction_indicated: 'border-red-600 text-red-700',
+      not_erupted: 'border-gray-300 text-gray-400',
     };
     
     if (isTemporary) {
       return `bg-orange-100 ${baseStyles[status] || 'border-border-color text-text-primary'}`;
     }
     
-    switch (status) {
-      case 'healthy': return 'bg-success/20 border-success text-success-content';
-      case 'caries': return 'bg-error/20 border-error text-error-content';
-      case 'filled': return 'bg-info/20 border-info text-info-content';
-      case 'crown': return 'bg-warning/20 border-warning text-warning-content';
-      case 'extracted': return 'bg-neutral/20 border-neutral text-neutral-content';
-      case 'implant': return 'bg-primary/20 border-primary text-primary-content';
-      case 'root_canal': return 'bg-secondary/20 border-secondary text-secondary-content';
-      case 'fracture': return 'bg-accent/20 border-accent text-accent-content';
-      case 'bridge': return 'bg-purple-500/20 border-purple-500 text-purple-600';
-      case 'extraction_indicated': return 'bg-red-600/20 border-red-600 text-red-700';
-      default: return 'bg-surface-secondary border-border-color text-text-primary';
+    if (isDarkMode) {
+      switch (status) {
+        case 'healthy': return 'bg-green-900/30 border-green-700 text-green-300';
+        case 'caries': return 'bg-red-900/30 border-red-700 text-red-300';
+        case 'filled': return 'bg-blue-900/30 border-blue-700 text-blue-300';
+        case 'crown': return 'bg-amber-900/30 border-amber-700 text-amber-300';
+        case 'extracted': return 'bg-gray-800/30 border-gray-600 text-gray-400';
+        case 'implant': return 'bg-purple-900/30 border-purple-700 text-purple-300';
+        case 'root_canal': return 'bg-pink-900/30 border-pink-700 text-pink-300';
+        case 'fracture': return 'bg-orange-900/30 border-orange-700 text-orange-300';
+        case 'bridge': return 'bg-indigo-900/30 border-indigo-700 text-indigo-300';
+        case 'extraction_indicated': return 'bg-red-950/30 border-red-800 text-red-400';
+        case 'not_erupted': return 'bg-gray-800 border-gray-600 text-gray-500 opacity-50';
+        default: return 'bg-gray-800 border-gray-600 text-gray-300';
+      }
+    } else {
+      switch (status) {
+        case 'healthy': return 'bg-success/20 border-success text-success-content';
+        case 'caries': return 'bg-error/20 border-error text-error-content';
+        case 'filled': return 'bg-info/20 border-info text-info-content';
+        case 'crown': return 'bg-warning/20 border-warning text-warning-content';
+        case 'extracted': return 'bg-gray-500/20 border-gray-500 text-gray-700';
+        case 'implant': return 'bg-primary/20 border-primary text-primary-content';
+        case 'root_canal': return 'bg-secondary/20 border-secondary text-secondary-content';
+        case 'fracture': return 'bg-accent/20 border-accent text-accent-content';
+        case 'bridge': return 'bg-purple-500/20 border-purple-500 text-purple-600';
+        case 'extraction_indicated': return 'bg-red-600/20 border-red-600 text-red-700';
+        case 'not_erupted': return 'bg-gray-100 border-gray-300 text-gray-400 opacity-50';
+        default: return 'bg-surface-secondary border-border-color text-text-primary';
+      }
     }
   };
 
   const getSurfaceStyle = (status: ToothStatus) => {
     if (isTemporary) {
-      switch (status) {
-        case 'healthy': return 'bg-orange-200 border-success';
-        case 'caries': return 'bg-orange-200 border-error';
-        case 'filled': return 'bg-orange-200 border-info';
-        case 'crown': return 'bg-orange-200 border-warning';
-        case 'extracted': return 'bg-orange-200 border-neutral';
-        case 'implant': return 'bg-orange-200 border-primary';
-        case 'root_canal': return 'bg-orange-200 border-secondary';
-        case 'fracture': return 'bg-orange-200 border-orange-600';
-        case 'bridge': return 'bg-orange-200 border-purple-500';
-        case 'extraction_indicated': return 'bg-orange-200 border-red-600';
-        default: return 'bg-orange-200 border-border-color';
+      if (isDarkMode) {
+        switch (status) {
+          case 'healthy': return 'bg-orange-900/40 border-green-700';
+          case 'caries': return 'bg-orange-900/40 border-red-700';
+          case 'filled': return 'bg-orange-900/40 border-blue-700';
+          case 'crown': return 'bg-orange-900/40 border-amber-700';
+          case 'extracted': return 'bg-orange-900/40 border-gray-600';
+          case 'implant': return 'bg-orange-900/40 border-purple-700';
+          case 'root_canal': return 'bg-orange-900/40 border-pink-700';
+          case 'fracture': return 'bg-orange-900/40 border-orange-700';
+          case 'bridge': return 'bg-orange-900/40 border-indigo-700';
+          case 'extraction_indicated': return 'bg-orange-900/40 border-red-800';
+          default: return 'bg-orange-900/40 border-gray-600';
+        }
+      } else {
+        switch (status) {
+          case 'healthy': return 'bg-orange-200 border-success';
+          case 'caries': return 'bg-orange-200 border-error';
+          case 'filled': return 'bg-orange-200 border-info';
+          case 'crown': return 'bg-orange-200 border-warning';
+          case 'extracted': return 'bg-orange-200 border-neutral';
+          case 'implant': return 'bg-orange-200 border-primary';
+          case 'root_canal': return 'bg-orange-200 border-secondary';
+          case 'fracture': return 'bg-orange-200 border-orange-600';
+          case 'bridge': return 'bg-orange-200 border-purple-500';
+          case 'extraction_indicated': return 'bg-orange-200 border-red-600';
+          default: return 'bg-orange-200 border-border-color';
+        }
       }
     }
     
-    switch (status) {
-      case 'healthy': return 'bg-success/40 border-success';
-      case 'caries': return 'bg-error/40 border-error';
-      case 'filled': return 'bg-info/40 border-info';
-      case 'crown': return 'bg-warning/40 border-warning';
-      case 'extracted': return 'bg-neutral/40 border-neutral';
-      case 'implant': return 'bg-primary/40 border-primary';
-      case 'root_canal': return 'bg-secondary/40 border-secondary';
-      case 'fracture': return 'bg-orange-600/40 border-orange-600';
-      case 'bridge': return 'bg-purple-500/40 border-purple-500';
-      case 'extraction_indicated': return 'bg-red-600/40 border-red-600';
-      default: return 'bg-surface-secondary/40 border-border-color';
+    if (isDarkMode) {
+      switch (status) {
+        case 'healthy': return 'bg-green-900/40 border-green-700';
+        case 'caries': return 'bg-red-900/40 border-red-700';
+        case 'filled': return 'bg-blue-900/40 border-blue-700';
+        case 'crown': return 'bg-amber-900/40 border-amber-700';
+        case 'extracted': return 'bg-gray-800/40 border-gray-600';
+        case 'implant': return 'bg-purple-900/40 border-purple-700';
+        case 'root_canal': return 'bg-pink-900/40 border-pink-700';
+        case 'fracture': return 'bg-orange-900/40 border-orange-700';
+        case 'bridge': return 'bg-indigo-900/40 border-indigo-700';
+        case 'extraction_indicated': return 'bg-red-950/40 border-red-800';
+        case 'not_erupted': return 'bg-gray-800/40 border-gray-600';
+        default: return 'bg-gray-800/40 border-gray-600';
+      }
+    } else {
+      switch (status) {
+        case 'healthy': return 'bg-success/40 border-success';
+        case 'caries': return 'bg-error/40 border-error';
+        case 'filled': return 'bg-info/40 border-info';
+        case 'crown': return 'bg-warning/40 border-warning';
+        case 'extracted': return 'bg-gray-500/40 border-gray-500';
+        case 'implant': return 'bg-primary/40 border-primary';
+        case 'root_canal': return 'bg-secondary/40 border-secondary';
+        case 'fracture': return 'bg-orange-600/40 border-orange-600';
+        case 'bridge': return 'bg-purple-500/40 border-purple-500';
+        case 'extraction_indicated': return 'bg-red-600/40 border-red-600';
+        case 'not_erupted': return 'bg-gray-200/40 border-gray-300';
+        default: return 'bg-surface-secondary/40 border-border-color';
+      }
     }
   };
 
@@ -127,18 +196,19 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   };
 
   const StatusIcon = statusIcons[tooth.status];
+  const verticalOffset = getToothVerticalOffset(tooth.id);
 
   return (
     <div 
-      className="relative group flex flex-col items-center"
-      style={{ transform: `translateY(${tooth.verticalOffset || 0}px)` }}
+      className={`relative group flex flex-col items-center ${tooth.notes ? 'tooltip tooltip-top before:max-w-xs before:whitespace-pre-wrap' : ''}`}
+      style={{ transform: `translateY(${verticalOffset}px)` }}
+      data-tip={tooth.notes || ''}
     >
-      {/* Número del diente con tooltip */}
-      <div className={`tooltip tooltip-top mb-1 ${tooth.demoLabel ? 'before:max-w-xs before:whitespace-pre-wrap' : ''}`} 
-           data-tip={tooth.demoLabel || ''}>
+      {/* Número del diente */}
+      <div className="mb-1">
         <div className={`text-xs font-bold flex items-center gap-1 ${isTemporary ? 'text-orange-500' : 'text-accent'}`}>
           <span>{tooth.clinicalId || tooth.id}</span>
-          {tooth.demoLabel && (
+          {tooth.notes && (
             <span className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
           )}
         </div>
@@ -193,31 +263,31 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
           <div className="absolute inset-0.5 grid grid-cols-3 grid-rows-3 gap-0.5">
             {/* Superficie vestibular (arriba) */}
             <div
-              className={`col-start-2 row-start-1 rounded-sm border ${isTemporary ? 'border-orange-400' : 'border-gray-300'} ${getSurfaceStyle(tooth.surfaces?.vestibular || tooth.status)}`}
+              className={`col-start-2 row-start-1 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.vestibular || tooth.status)}`}
               title="Superficie vestibular"
             />
             
             {/* Superficie mesial (izquierda) */}
             <div
-              className={`col-start-1 row-start-2 rounded-sm border ${isTemporary ? 'border-orange-400' : 'border-gray-300'} ${getSurfaceStyle(tooth.surfaces?.mesial || tooth.status)}`}
+              className={`col-start-1 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.mesial || tooth.status)}`}
               title="Superficie mesial"
             />
             
             {/* Superficie oclusal (centro) */}
             <div
-              className={`col-start-2 row-start-2 rounded-sm border ${isTemporary ? 'border-orange-400' : 'border-gray-300'} ${getSurfaceStyle(tooth.surfaces?.oclusal || tooth.status)}`}
+              className={`col-start-2 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.oclusal || tooth.status)}`}
               title="Superficie oclusal"
             />
             
             {/* Superficie distal (derecha) */}
             <div
-              className={`col-start-3 row-start-2 rounded-sm border ${isTemporary ? 'border-orange-400' : 'border-gray-300'} ${getSurfaceStyle(tooth.surfaces?.distal || tooth.status)}`}
+              className={`col-start-3 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.distal || tooth.status)}`}
               title="Superficie distal"
             />
             
             {/* Superficie lingual (abajo) */}
             <div
-              className={`col-start-2 row-start-3 rounded-sm border ${isTemporary ? 'border-orange-400' : 'border-gray-300'} ${getSurfaceStyle(tooth.surfaces?.lingual || tooth.status)}`}
+              className={`col-start-2 row-start-3 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.lingual || tooth.status)}`}
               title="Superficie lingual"
             />
           </div>
