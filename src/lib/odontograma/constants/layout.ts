@@ -5,10 +5,13 @@
 
 // Universal height for all tooth slot containers
 // This height accommodates the largest tooth (molar with roots) plus spacing
-export const TOOTH_SLOT_HEIGHT = 'h-[160px]';
+export const TOOTH_SLOT_HEIGHT = 'h-[130px]';
 
 // Fixed height for individual tooth components
 export const TOOTH_HEIGHT = 'h-[105px]';
+
+// Height for temporary tooth slot containers
+export const TEMPORARY_TOOTH_SLOT_HEIGHT = 'h-[100px]';
 
 // Consistent tooth container widths
 export const TOOTH_SLOT_WIDTH = {

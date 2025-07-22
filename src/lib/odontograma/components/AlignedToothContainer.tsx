@@ -1,5 +1,5 @@
 import React from 'react';
-import { TOOTH_SLOT_HEIGHT, TOOTH_SLOT_WIDTH, DEV_COLORS } from '../constants/layout';
+import { TOOTH_SLOT_HEIGHT, TEMPORARY_TOOTH_SLOT_HEIGHT, TOOTH_SLOT_WIDTH, DEV_COLORS } from '../constants/layout';
 
 export interface AlignedToothContainerProps {
   children: React.ReactNode;
@@ -16,8 +16,8 @@ export const AlignedToothContainer: React.FC<AlignedToothContainerProps> = ({
   developerMode = false,
   toothId
 }) => {
-  // CRITICAL: All containers have the same height - no conditional logic!
-  const containerHeight = TOOTH_SLOT_HEIGHT;
+  // Use different heights for temporary vs permanent teeth
+  const containerHeight = isTemporary ? TEMPORARY_TOOTH_SLOT_HEIGHT : TOOTH_SLOT_HEIGHT;
   
   // Vertical alignment: upper teeth align to top, lower teeth align to bottom
   // This creates the natural occlusal line alignment
