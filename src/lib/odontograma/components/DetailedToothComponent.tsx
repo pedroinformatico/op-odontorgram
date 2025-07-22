@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tooth, ToothStatus } from '../types';
 import { getToothVerticalOffset } from '../config/layoutConfig';
+import { TOOTH_HEIGHT } from '../constants/layout';
 import { Check, AlertCircle, CircleDot, Crown, X, Plus, Zap, AlertTriangle as TriangleAlert, Link, AlertOctagon } from 'lucide-react';
 
 export interface DetailedToothComponentProps {
@@ -10,6 +11,7 @@ export interface DetailedToothComponentProps {
   isUpper: boolean;
   isTemporary?: boolean;
   isDarkMode?: boolean;
+  developerMode?: boolean;
 }
 
 const statusIcons = {
@@ -32,7 +34,8 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   onToothClick, 
   isUpper,
   isTemporary = false,
-  isDarkMode = false
+  isDarkMode = false,
+  developerMode = false
 }) => {
   const getToothStyle = (status: ToothStatus) => {
     const baseStyles = isDarkMode ? {
@@ -180,14 +183,14 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
 
   const getToothSize = () => {
     if (isTemporary) {
-      if (isFrontal) return 'w-6 h-10 sm:w-8 sm:h-12';
-      if (isPremolar) return 'w-7 h-12 sm:w-9 sm:h-14';
-      return 'w-8 h-14 sm:w-10 sm:h-16';
+      if (isFrontal) return 'w-6 sm:w-8';
+      if (isPremolar) return 'w-7 sm:w-9';
+      return 'w-8 sm:w-10';
     }
     
-    if (isFrontal) return 'w-8 h-12 sm:w-10 sm:h-16';
-    if (isPremolar) return 'w-9 h-14 sm:w-11 sm:h-18';
-    return 'w-10 h-16 sm:w-12 sm:h-20';
+    if (isFrontal) return 'w-8 sm:w-10';
+    if (isPremolar) return 'w-9 sm:w-11';
+    return 'w-10 sm:w-12';
   };
 
   const handleToothClick = (e: React.MouseEvent) => {
@@ -198,138 +201,165 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   const StatusIcon = statusIcons[tooth.status];
   const verticalOffset = getToothVerticalOffset(tooth.id);
 
-  return (
-    <div 
-      className={`relative group flex flex-col items-center ${tooth.notes ? 'tooltip tooltip-top before:max-w-xs before:whitespace-pre-wrap' : ''}`}
-      style={{ transform: `translateY(${verticalOffset}px)` }}
-      data-tip={tooth.notes || ''}
-    >
-      {/* Número del diente */}
-      <div className="mb-1">
-        <div className={`text-xs font-bold flex items-center gap-1 ${isTemporary ? 'text-orange-500' : 'text-accent'}`}>
-          <span>{tooth.clinicalId || tooth.id}</span>
-          {tooth.notes && (
-            <span className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
-          )}
-        </div>
+  // Componente del label (número del diente)
+  const toothLabel = (
+    <div className={isUpper ? "mb-1" : "mt-1"}>
+      <div className={`text-xs font-bold flex items-center gap-1 ${isTemporary ? 'text-orange-500' : 'text-accent'}`}>
+        <span>{tooth.clinicalId || tooth.id}</span>
+        {tooth.notes && (
+          <span className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
+        )}
       </div>
-      
-      {/* Raíces del diente (para dientes superiores) */}
-      {isUpper && (
-        <div className={`w-full ${isTemporary ? 'h-2 sm:h-3' : 'h-3 sm:h-4'} flex justify-center mb-1 relative`}>
-          <div className={isExtracted ? 'opacity-30' : ''}>
-            {isFrontal ? (
-              <div className={`${isTemporary ? 'w-1 sm:w-1.5 h-2 sm:h-3' : 'w-1.5 sm:w-2 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-            ) : isPremolar ? (
-              <div className="flex gap-1">
-                <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-                <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-              </div>
-            ) : (
-              <div className="flex gap-0.5">
-                <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-                <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-                <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-b-0 rounded-t-full shadow-sm`}></div>
-              </div>
-            )}
-          </div>
-          {/* X mark for extracted teeth */}
-          {isExtracted && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-0.5 bg-red-500 rotate-45 max-w-[20px]"></div>
-              <div className="w-full h-0.5 bg-red-500 -rotate-45 absolute max-w-[20px]"></div>
-            </div>
-          )}
-        </div>
-      )}
-      
-      {/* Diente principal */}
-      <div className={`${getToothSize()} relative`}>
-        {/* Corona del diente */}
-        <button
-          className={`
-            w-full ${isTemporary ? 'h-6 sm:h-10' : 'h-8 sm:h-12'} border-2 transition-all duration-200
-            ${getToothShape()}
-            ${getToothStyle(tooth.status)}
-            ${isSelected ? 'ring-2 ring-accent ring-offset-2' : ''}
-            ${isExtracted ? 'opacity-40' : 'hover:scale-105 hover:shadow-lg'}
-            cursor-pointer
-            flex items-center justify-center relative overflow-hidden
-            shadow-sm
-          `}
-          onClick={handleToothClick}
-        >
-          {/* Grid de superficies visibles */}
-          <div className="absolute inset-0.5 grid grid-cols-3 grid-rows-3 gap-0.5">
-            {/* Superficie vestibular (arriba) */}
-            <div
-              className={`col-start-2 row-start-1 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.vestibular || tooth.status)}`}
-              title="Superficie vestibular"
-            />
-            
-            {/* Superficie mesial (izquierda) */}
-            <div
-              className={`col-start-1 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.mesial || tooth.status)}`}
-              title="Superficie mesial"
-            />
-            
-            {/* Superficie oclusal (centro) */}
-            <div
-              className={`col-start-2 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.oclusal || tooth.status)}`}
-              title="Superficie oclusal"
-            />
-            
-            {/* Superficie distal (derecha) */}
-            <div
-              className={`col-start-3 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.distal || tooth.status)}`}
-              title="Superficie distal"
-            />
-            
-            {/* Superficie lingual (abajo) */}
-            <div
-              className={`col-start-2 row-start-3 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.lingual || tooth.status)}`}
-              title="Superficie lingual"
-            />
-          </div>
+    </div>
+  );
 
-          {/* Marca de extracción */}
-          {isExtracted && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-10 h-0.5 bg-red-500 rotate-45"></div>
-              <div className="w-10 h-0.5 bg-red-500 -rotate-45 absolute"></div>
-            </div>
-          )}
-        </button>
-
-        {/* Raíces del diente (para dientes inferiores) */}
-        {!isUpper && (
-          <div className={`w-full ${isTemporary ? 'h-2 sm:h-3' : 'h-3 sm:h-4'} flex justify-center mt-1 relative`}>
-            <div className={isExtracted ? 'opacity-30' : ''}>
-              {isFrontal ? (
-                <div className={`${isTemporary ? 'w-1 sm:w-1.5 h-2 sm:h-3' : 'w-1.5 sm:w-2 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-              ) : isPremolar ? (
-                <div className="flex gap-1">
-                  <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-                  <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-                </div>
-              ) : (
-                <div className="flex gap-0.5">
-                  <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-                  <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-                  <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 border-t-0 rounded-b-full shadow-sm`}></div>
-                </div>
-              )}
-            </div>
-            {/* X mark for extracted teeth */}
-            {isExtracted && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-0.5 bg-red-500 rotate-45 max-w-[20px]"></div>
-                <div className="w-full h-0.5 bg-red-500 -rotate-45 absolute max-w-[20px]"></div>
-              </div>
-            )}
+  // Componente de las raíces
+  const toothRoots = (
+    <div className={`w-full ${isTemporary ? 'h-2 sm:h-3' : 'h-3 sm:h-4'} flex justify-center ${isUpper ? 'mb-1' : ''} relative`}>
+      <div className={isExtracted ? 'opacity-30' : ''}>
+        {isFrontal ? (
+          <div className={`${isTemporary ? 'w-1 sm:w-1.5 h-2 sm:h-3' : 'w-1.5 sm:w-2 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
+        ) : isPremolar ? (
+          <div className="flex gap-1">
+            <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
+            <div className={`${isTemporary ? 'w-0.5 sm:w-1 h-2 sm:h-3' : 'w-1 sm:w-1.5 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
+          </div>
+        ) : (
+          <div className="flex gap-0.5">
+            <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
+            <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
+            <div className={`${isTemporary ? 'w-0.5 h-2 sm:h-3' : 'w-0.5 sm:w-1 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
           </div>
         )}
       </div>
+      {/* X mark for extracted teeth */}
+      {isExtracted && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full h-0.5 bg-red-500 rotate-45 max-w-[20px]"></div>
+          <div className="w-full h-0.5 bg-red-500 -rotate-45 absolute max-w-[20px]"></div>
+        </div>
+      )}
+    </div>
+  );
+
+  // Componente del diente principal
+  const toothBody = (
+    <div className={`${getToothSize()} mb-1 relative`}>
+      {/* Corona del diente */}
+      <button
+        className={`
+          w-full ${isTemporary ? 'h-6 sm:h-10' : 'h-8 sm:h-12'} border-2 transition-all duration-200
+          ${getToothShape()}
+          ${getToothStyle(tooth.status)}
+          ${isSelected ? 'ring-2 ring-accent ring-offset-2' : ''}
+          ${isExtracted ? 'opacity-40' : 'hover:scale-105 hover:shadow-lg'}
+          cursor-pointer
+          flex items-center justify-center relative overflow-hidden
+          shadow-sm
+        `}
+        onClick={handleToothClick}
+      >
+        {/* Grid de superficies visibles */}
+        <div className="absolute inset-0.5 grid grid-cols-3 grid-rows-3 gap-0.5">
+          {/* Superficie vestibular (arriba) */}
+          <div
+            className={`col-start-2 row-start-1 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.vestibular || tooth.status)}`}
+            title="Superficie vestibular"
+          />
+          
+          {/* Superficie mesial (izquierda) */}
+          <div
+            className={`col-start-1 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.mesial || tooth.status)}`}
+            title="Superficie mesial"
+          />
+          
+          {/* Superficie oclusal (centro) */}
+          <div
+            className={`col-start-2 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.oclusal || tooth.status)}`}
+            title="Superficie oclusal"
+          />
+          
+          {/* Superficie distal (derecha) */}
+          <div
+            className={`col-start-3 row-start-2 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.distal || tooth.status)}`}
+            title="Superficie distal"
+          />
+          
+          {/* Superficie lingual (abajo) */}
+          <div
+            className={`col-start-2 row-start-3 rounded-sm border ${isTemporary ? (isDarkMode ? 'border-orange-700' : 'border-orange-400') : (isDarkMode ? 'border-gray-600' : 'border-gray-300')} ${getSurfaceStyle(tooth.surfaces?.lingual || tooth.status)}`}
+            title="Superficie lingual"
+          />
+        </div>
+
+        {/* Marca de extracción */}
+        {isExtracted && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-10 h-0.5 bg-red-500 rotate-45"></div>
+            <div className="w-10 h-0.5 bg-red-500 -rotate-45 absolute"></div>
+          </div>
+        )}
+      </button>
+    </div>
+  );
+
+  // Contenido del diente (label + raíz + diente o diente + raíz + label)
+  const toothContent = (
+    <div 
+      className={`h-[105px] relative group flex flex-col items-center ${isUpper ? 'justify-start' : 'justify-end'} ${tooth.notes ? 'tooltip tooltip-top before:max-w-xs before:whitespace-pre-wrap' : ''} ${developerMode ? 'border-2 border-yellow-500 border-dashed' : ''}`}
+      data-tip={tooth.notes || ''}
+    >
+      {isUpper ? (
+        <>
+          {/* Para dientes superiores: label → raíces → diente */}
+          {toothLabel}
+          {toothRoots}
+          {toothBody}
+        </>
+      ) : (
+        <>
+          {/* Para dientes inferiores: diente → raíces → label */}
+          {toothBody}
+          {toothRoots}
+          {toothLabel}
+        </>
+      )}
+    </div>
+  );
+
+  // Auto-layout structure: 3 elements (offset, tooth, libre)
+  // Height is managed by parent AlignedToothContainer (160px)
+  return (
+    <div className="h-full flex flex-col">
+      {isUpper ? (
+        <>
+          {/* Offset dinámico */}
+          <div 
+            style={{ height: `${verticalOffset}px` }} 
+            className={developerMode ? 'bg-pink-200/50' : ''}
+          />
+          {/* Contenedor del diente fijo (105px) */}
+          {toothContent}
+          {/* Libre (ocupa el resto) */}
+          <div 
+            className={`flex-1 ${developerMode ? 'bg-yellow-200/50' : ''}`}
+          />
+        </>
+      ) : (
+        <>
+          {/* Libre (ocupa el resto) */}
+          <div 
+            className={`flex-1 ${developerMode ? 'bg-yellow-200/50' : ''}`}
+          />
+          {/* Contenedor del diente fijo (105px) */}
+          {toothContent}
+          {/* Offset dinámico */}
+          <div 
+            style={{ height: `${verticalOffset}px` }} 
+            className={developerMode ? 'bg-pink-200/50' : ''}
+          />
+        </>
+      )}
     </div>
   );
 };

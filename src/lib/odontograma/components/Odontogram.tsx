@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tooth } from '../types';
 import { DetailedToothComponent } from './DetailedToothComponent';
+import { AlignedToothContainer } from './AlignedToothContainer';
+import { TOOTH_SLOT_HEIGHT, TOOTH_SPACING, DEV_COLORS } from '../constants/layout';
 
 export interface OdontogramProps {
   teeth: Tooth[];
@@ -15,6 +17,9 @@ export interface OdontogramProps {
   onSimulateBite: () => void;
   selectedCaseId?: string;
   onCaseSelect?: (caseId: string) => void;
+  developerMode?: boolean;
+  onToggleDeveloperMode?: (enabled: boolean) => void;
+  onToothHover?: (tooth: Tooth | null) => void;
 }
 
 export const Odontogram: React.FC<OdontogramProps> = ({ 
@@ -29,7 +34,10 @@ export const Odontogram: React.FC<OdontogramProps> = ({
   isAnimatingBite,
   onSimulateBite,
   selectedCaseId,
-  onCaseSelect
+  onCaseSelect,
+  developerMode = false,
+  onToggleDeveloperMode,
+  onToothHover
 }) => {
   const getQuadrantTeeth = (quadrant: number) => {
     return teeth.filter(tooth => tooth.quadrant === quadrant).sort((a, b) => a.position - b.position);
@@ -72,7 +80,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="mb-6 text-center space-y-3">
+      <div className=" text-center space-y-3">
         {/* Título principal con toggle */}
         <div className="flex items-center justify-center gap-3">
           <h2 className="text-xl font-semibold text-text-primary">
@@ -107,6 +115,26 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               20 dientes temporales
             </div>
           )}
+          
+          {/* Botón para modo desarrollador */}
+          <button
+            onClick={() => {
+              if (onToggleDeveloperMode) {
+                onToggleDeveloperMode(!developerMode);
+              }
+            }}
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm transition-all ${
+              developerMode 
+                ? 'bg-purple-500/20 text-purple-600 border border-purple-500/50' 
+                : 'bg-gray-100 text-gray-500 border border-gray-300 hover:bg-gray-200'
+            }`}
+            title="Modo desarrollador - Muestra la estructura del layout"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs font-medium">Dev</span>
+          </button>
         </div>
       </div>
       
@@ -118,82 +146,126 @@ export const Odontogram: React.FC<OdontogramProps> = ({
             {/* Columna 1 - Grupos 1 y 4 */}
             <div className="flex flex-col">
               {/* Header Grupo 1 */}
-              <div className="h-[50px] flex flex-col items-center justify-end mb-6">
-                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30 mb-2">
+              <div className="h-[50px] flex flex-col items-center justify-end ">
+                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 1
                 </div>
                 <div className="w-full h-3 border-l-2 border-r-2 border-t-2 border-accent/50 rounded-t-lg"></div>
               </div>
               
               {/* Fila 1: Dientes permanentes superiores */}
-              <div className="h-[110px] flex items-center justify-end px-2 mb-2 pb-4">
-                <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-end px-2 pb-4 ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 1 Row</span>
+                )}
+                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                   {[...grupo1].reverse().map((tooth) => (
-                    <DetailedToothComponent
+                    <AlignedToothContainer
                       key={tooth.id}
-                      tooth={tooth}
-                      isSelected={selectedTooth?.id === tooth.id}
-                      onToothClick={onToothClick}
                       isUpper={true}
-                    />
+                      isTemporary={false}
+                      developerMode={developerMode}
+                      toothId={tooth.clinicalId || tooth.id.toString()}
+                    >
+                      <DetailedToothComponent
+                        tooth={tooth}
+                        isSelected={selectedTooth?.id === tooth.id}
+                        onToothClick={onToothClick}
+                        isUpper={true}
+                        developerMode={developerMode}
+                      />
+                    </AlignedToothContainer>
                   ))}
                 </div>
               </div>
               
               {/* Fila 2: Dientes temporales superiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-end px-2 ${showBiteEffect || showTemporaryTeeth ? 'mb-4 pb-3' : ''}`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-end px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Upper Row</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {[...grupo1Temp].reverse().map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={true}
                         isTemporary={true}
-                      />
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={true}
+                          developerMode={developerMode}
+                          isTemporary={true}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 )}
               </div>
               
               {/* Fila 3: Dientes temporales inferiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-end px-2 ${showBiteEffect || showTemporaryTeeth ? 'pt-3' : 'mb-8'}`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-end px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Lower Row</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {[...grupo4Temp].reverse().map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={false}
                         isTemporary={true}
-                      />
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={false}
+                          developerMode={developerMode}
+                          isTemporary={true}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 )}
               </div>
               
               {/* Fila 4: Dientes permanentes inferiores */}
-              <div className="mt-8 h-[110px] flex items-center justify-end px-2">
-                <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-start px-2 ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 4 Row</span>
+                )}
+                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                   {[...grupo4].reverse().map((tooth) => (
-                    <DetailedToothComponent
+                    <AlignedToothContainer
                       key={tooth.id}
-                      tooth={tooth}
-                      isSelected={selectedTooth?.id === tooth.id}
-                      onToothClick={onToothClick}
                       isUpper={false}
-                    />
+                      isTemporary={false}
+                      developerMode={developerMode}
+                      toothId={tooth.clinicalId || tooth.id.toString()}
+                    >
+                      <DetailedToothComponent
+                        tooth={tooth}
+                        isSelected={selectedTooth?.id === tooth.id}
+                        onToothClick={onToothClick}
+                        isUpper={false}
+                        developerMode={developerMode}
+                      />
+                    </AlignedToothContainer>
                   ))}
                 </div>
               </div>
               
               {/* Footer Grupo 4 */}
               <div className="h-[50px] flex flex-col items-center justify-start">
-                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg mb-2"></div>
+                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg"></div>
                 <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 4
                 </div>
@@ -203,75 +275,113 @@ export const Odontogram: React.FC<OdontogramProps> = ({
             {/* Columna 2 - Grupos 2 y 5 */}
             <div className="flex flex-col">
               {/* Header Grupo 2 */}
-              <div className="h-[50px] flex flex-col items-center justify-end mb-6">
-                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30 mb-2">
+              <div className="h-[50px] flex flex-col items-center justify-end ">
+                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 2
                 </div>
                 <div className="w-full h-3 border-l-2 border-r-2 border-t-2 border-accent/50 rounded-t-lg"></div>
               </div>
               
               {/* Fila 1: Dientes permanentes superiores */}
-              <div className="h-[110px] flex items-center justify-center px-2 mb-2 pb-4">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-center px-2  ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 2 Row</span>
+                )}
                 <div className="flex items-center gap-1">
                   {/* Lado derecho del grupo 2 (13, 12, 11) */}
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo2Superior.slice(0, 3).reverse().map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={true}
-                      />
+                        isTemporary={false}
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={true}
+                          developerMode={developerMode}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                   {/* Separador entre incisivos centrales */}
                   <div className="w-0.5 h-16 bg-accent/30 mx-6"></div>
                   {/* Lado izquierdo del grupo 2 (21, 22, 23) */}
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo2Superior.slice(3).map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={true}
-                      />
+                        isTemporary={false}
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={true}
+                          developerMode={developerMode}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 </div>
               </div>
               
               {/* Fila 2: Dientes temporales superiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-center px-2 ${showBiteEffect || showTemporaryTeeth ? 'mb-4 pb-3' : ''}`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-center px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Upper Row (Group 2)</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
                   <div className="flex items-center gap-1">
                     {/* Lado derecho del grupo 2 temporal */}
-                    <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                       {grupo2Temp.slice(0, 3).reverse().map((tooth) => (
-                        <DetailedToothComponent
+                        <AlignedToothContainer
                           key={tooth.id}
-                          tooth={tooth}
-                          isSelected={selectedTooth?.id === tooth.id}
-                          onToothClick={onToothClick}
                           isUpper={true}
                           isTemporary={true}
-                        />
+                          developerMode={developerMode}
+                          toothId={tooth.clinicalId || tooth.id.toString()}
+                        >
+                          <DetailedToothComponent
+                            tooth={tooth}
+                            isSelected={selectedTooth?.id === tooth.id}
+                            onToothClick={onToothClick}
+                            isUpper={true}
+                            isTemporary={true}
+                            developerMode={developerMode}
+                          />
+                        </AlignedToothContainer>
                       ))}
                     </div>
                     {/* Separador entre incisivos centrales */}
                     <div className="w-0.5 h-12 bg-orange-500/30 mx-6"></div>
                     {/* Lado izquierdo del grupo 2 temporal */}
-                    <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                       {grupo2Temp.slice(3).map((tooth) => (
-                        <DetailedToothComponent
+                        <AlignedToothContainer
                           key={tooth.id}
-                          tooth={tooth}
-                          isSelected={selectedTooth?.id === tooth.id}
-                          onToothClick={onToothClick}
                           isUpper={true}
                           isTemporary={true}
-                        />
+                          developerMode={developerMode}
+                          toothId={tooth.clinicalId || tooth.id.toString()}
+                        >
+                          <DetailedToothComponent
+                            tooth={tooth}
+                            isSelected={selectedTooth?.id === tooth.id}
+                            onToothClick={onToothClick}
+                            isUpper={true}
+                            isTemporary={true}
+                            developerMode={developerMode}
+                          />
+                        </AlignedToothContainer>
                       ))}
                     </div>
                   </div>
@@ -279,35 +389,54 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               </div>
               
               {/* Fila 3: Dientes temporales inferiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-center px-2 ${showBiteEffect || showTemporaryTeeth ? 'pt-3' : 'mb-8'}`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-center px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Lower Row (Group 5)</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
                   <div className="flex items-center gap-1">
                     {/* Lado derecho del grupo 5 temporal */}
-                    <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                       {grupo5Temp.slice(0, 3).reverse().map((tooth) => (
-                        <DetailedToothComponent
+                        <AlignedToothContainer
                           key={tooth.id}
-                          tooth={tooth}
-                          isSelected={selectedTooth?.id === tooth.id}
-                          onToothClick={onToothClick}
                           isUpper={false}
                           isTemporary={true}
-                        />
+                          developerMode={developerMode}
+                          toothId={tooth.clinicalId || tooth.id.toString()}
+                        >
+                          <DetailedToothComponent
+                            tooth={tooth}
+                            isSelected={selectedTooth?.id === tooth.id}
+                            onToothClick={onToothClick}
+                            isUpper={false}
+                            isTemporary={true}
+                            developerMode={developerMode}
+                          />
+                        </AlignedToothContainer>
                       ))}
                     </div>
                     {/* Separador entre incisivos centrales */}
                     <div className="w-0.5 h-12 bg-orange-500/30 mx-6"></div>
                     {/* Lado izquierdo del grupo 5 temporal */}
-                    <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                       {grupo5Temp.slice(3).map((tooth) => (
-                        <DetailedToothComponent
+                        <AlignedToothContainer
                           key={tooth.id}
-                          tooth={tooth}
-                          isSelected={selectedTooth?.id === tooth.id}
-                          onToothClick={onToothClick}
                           isUpper={false}
                           isTemporary={true}
-                        />
+                          developerMode={developerMode}
+                          toothId={tooth.clinicalId || tooth.id.toString()}
+                        >
+                          <DetailedToothComponent
+                            tooth={tooth}
+                            isSelected={selectedTooth?.id === tooth.id}
+                            onToothClick={onToothClick}
+                            isUpper={false}
+                            isTemporary={true}
+                            developerMode={developerMode}
+                          />
+                        </AlignedToothContainer>
                       ))}
                     </div>
                   </div>
@@ -315,32 +444,51 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               </div>
               
               {/* Fila 4: Dientes permanentes inferiores */}
-              <div className="mt-8 h-[110px] flex items-center justify-center px-2">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-center px-2 ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 5 Row</span>
+                )}
                 <div className="flex items-center gap-1">
                   {/* Lado derecho del grupo 5 (43, 42, 41) */}
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo5Inferior.slice(0, 3).reverse().map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={false}
-                      />
+                        isTemporary={false}
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={false}
+                          developerMode={developerMode}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                   {/* Separador entre incisivos centrales */}
                   <div className="w-0.5 h-16 bg-accent/30 mx-6"></div>
                   {/* Lado izquierdo del grupo 5 (31, 32, 33) */}
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo5Inferior.slice(3).map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={false}
-                      />
+                        isTemporary={false}
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={false}
+                          developerMode={developerMode}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 </div>
@@ -348,7 +496,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
               
               {/* Footer Grupo 5 */}
               <div className="h-[50px] flex flex-col items-center justify-start">
-                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg mb-2"></div>
+                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg"></div>
                 <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 5
                 </div>
@@ -358,82 +506,126 @@ export const Odontogram: React.FC<OdontogramProps> = ({
             {/* Columna 3 - Grupos 3 y 6 */}
             <div className="flex flex-col">
               {/* Header Grupo 3 */}
-              <div className="h-[50px] flex flex-col items-center justify-end mb-6  ">
-                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30 mb-2">
+              <div className="h-[50px] flex flex-col items-center justify-end   ">
+                <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 3
                 </div>
                 <div className="w-full h-3 border-l-2 border-r-2 border-t-2 border-accent/50 rounded-t-lg"></div>
               </div>
               
               {/* Fila 1: Dientes permanentes superiores */}
-              <div className="h-[110px] flex items-center justify-start px-2 mb-2 pb-4">
-                <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-start px-2 pb-4 ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 3 Row</span>
+                )}
+                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                   {grupo3.map((tooth) => (
-                    <DetailedToothComponent
+                    <AlignedToothContainer
                       key={tooth.id}
-                      tooth={tooth}
-                      isSelected={selectedTooth?.id === tooth.id}
-                      onToothClick={onToothClick}
                       isUpper={true}
-                    />
+                      isTemporary={false}
+                      developerMode={developerMode}
+                      toothId={tooth.clinicalId || tooth.id.toString()}
+                    >
+                      <DetailedToothComponent
+                        tooth={tooth}
+                        isSelected={selectedTooth?.id === tooth.id}
+                        onToothClick={onToothClick}
+                        isUpper={true}
+                        developerMode={developerMode}
+                      />
+                    </AlignedToothContainer>
                   ))}
                 </div>
               </div>
               
               {/* Fila 2: Dientes temporales superiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-start px-2 ${showBiteEffect || showTemporaryTeeth ? 'mb-4 pb-3' : ''}`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-start px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Upper Row (Group 3)</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo3Temp.map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={true}
                         isTemporary={true}
-                      />
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={true}
+                          developerMode={developerMode}
+                          isTemporary={true}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 )}
               </div>
               
               {/* Fila 3: Dientes temporales inferiores / Espacio mordida */}
-              <div className={`${showBiteEffect || showTemporaryTeeth ? 'h-[90px]' : 'h-0'} transition-all duration-300 flex items-center justify-start px-2 ${showBiteEffect || showTemporaryTeeth ? 'pt-3' : 'mb-8'} mt8`}>
+              <div className={`${showTemporaryTeeth ? TOOTH_SLOT_HEIGHT : 'h-0 overflow-hidden'} transition-all duration-300 flex items-center justify-start px-2 ${showTemporaryTeeth ? 'pb-3' : ''} ${developerMode && showTemporaryTeeth ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Lower Row (Group 6)</span>
+                )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                     {grupo6Temp.map((tooth) => (
-                      <DetailedToothComponent
+                      <AlignedToothContainer
                         key={tooth.id}
-                        tooth={tooth}
-                        isSelected={selectedTooth?.id === tooth.id}
-                        onToothClick={onToothClick}
                         isUpper={false}
                         isTemporary={true}
-                      />
+                        developerMode={developerMode}
+                        toothId={tooth.clinicalId || tooth.id.toString()}
+                      >
+                        <DetailedToothComponent
+                          tooth={tooth}
+                          isSelected={selectedTooth?.id === tooth.id}
+                          onToothClick={onToothClick}
+                          isUpper={false}
+                          developerMode={developerMode}
+                          isTemporary={true}
+                        />
+                      </AlignedToothContainer>
                     ))}
                   </div>
                 )}
               </div>
               
               {/* Fila 4: Dientes permanentes inferiores */}
-              <div className="mt-8 h-[110px] flex items-center justify-start px-2">
-                <div className="flex gap-1 sm:gap-1.5 lg:gap-2">
+              <div className={`${TOOTH_SLOT_HEIGHT} flex items-center justify-start px-2 ${developerMode ? `border-2 border-purple-500 border-dashed relative` : ''}`}>
+                {developerMode && (
+                  <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 6 Row</span>
+                )}
+                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
                   {grupo6.map((tooth) => (
-                    <DetailedToothComponent
+                    <AlignedToothContainer
                       key={tooth.id}
-                      tooth={tooth}
-                      isSelected={selectedTooth?.id === tooth.id}
-                      onToothClick={onToothClick}
                       isUpper={false}
-                    />
+                      isTemporary={false}
+                      developerMode={developerMode}
+                      toothId={tooth.clinicalId || tooth.id.toString()}
+                    >
+                      <DetailedToothComponent
+                        tooth={tooth}
+                        isSelected={selectedTooth?.id === tooth.id}
+                        onToothClick={onToothClick}
+                        isUpper={false}
+                        developerMode={developerMode}
+                      />
+                    </AlignedToothContainer>
                   ))}
                 </div>
               </div>
               
               {/* Footer Grupo 6 */}
               <div className="h-[50px] flex flex-col items-center justify-start">
-                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg mb-2"></div>
+                <div className="w-full h-3 border-l-2 border-r-2 border-b-2 border-accent/50 rounded-b-lg"></div>
                 <div className="px-3 py-1 bg-accent/10 text-accent rounded text-sm font-medium border border-accent/30">
                   Grupo 6
                 </div>
