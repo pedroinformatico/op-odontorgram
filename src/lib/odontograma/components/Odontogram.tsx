@@ -158,7 +158,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {developerMode && (
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 1 Row</span>
                 )}
-                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                <div className={`flex gap-2`}>
                   {[...grupo1].reverse().map((tooth) => (
                     <AlignedToothContainer
                       key={tooth.id}
@@ -185,7 +185,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Upper Row</span>
                 )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {[...grupo1Temp].reverse().map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -214,7 +214,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Lower Row</span>
                 )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {[...grupo4Temp].reverse().map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -242,7 +242,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {developerMode && (
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 4 Row</span>
                 )}
-                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                <div className={`flex gap-2`}>
                   {[...grupo4].reverse().map((tooth) => (
                     <AlignedToothContainer
                       key={tooth.id}
@@ -289,7 +289,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 )}
                 <div className="flex items-center gap-1">
                   {/* Lado derecho del grupo 2 (13, 12, 11) */}
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo2Superior.slice(0, 3).reverse().map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -309,9 +309,9 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                     ))}
                   </div>
                   {/* Separador entre incisivos centrales */}
-                  <div className="w-0.5 h-16 bg-accent/30 mx-6"></div>
+                  <div className="w-0.5 h-16 bg-accent/30 mx-2"></div>
                   {/* Lado izquierdo del grupo 2 (21, 22, 23) */}
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo2Superior.slice(3).map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -341,7 +341,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {showTemporaryTeeth && !showBiteEffect && (
                   <div className="flex items-center gap-1">
                     {/* Lado derecho del grupo 2 temporal */}
-                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                    <div className={`flex gap-2`}>
                       {grupo2Temp.slice(0, 3).reverse().map((tooth) => (
                         <AlignedToothContainer
                           key={tooth.id}
@@ -362,9 +362,9 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                       ))}
                     </div>
                     {/* Separador entre incisivos centrales */}
-                    <div className="w-0.5 h-12 bg-orange-500/30 mx-6"></div>
+                    <div className="w-0.5 h-12 bg-orange-500/30 mx-2"></div>
                     {/* Lado izquierdo del grupo 2 temporal */}
-                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                    <div className={`flex gap-2`}>
                       {grupo2Temp.slice(3).map((tooth) => (
                         <AlignedToothContainer
                           key={tooth.id}
@@ -396,7 +396,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {showTemporaryTeeth && !showBiteEffect && (
                   <div className="flex items-center gap-1">
                     {/* Lado derecho del grupo 5 temporal */}
-                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                    <div className={`flex gap-2`}>
                       {grupo5Temp.slice(0, 3).reverse().map((tooth) => (
                         <AlignedToothContainer
                           key={tooth.id}
@@ -417,9 +417,9 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                       ))}
                     </div>
                     {/* Separador entre incisivos centrales */}
-                    <div className="w-0.5 h-12 bg-orange-500/30 mx-6"></div>
+                    <div className="w-0.5 h-12 bg-orange-500/30 mx-2"></div>
                     {/* Lado izquierdo del grupo 5 temporal */}
-                    <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                    <div className={`flex gap-2`}>
                       {grupo5Temp.slice(3).map((tooth) => (
                         <AlignedToothContainer
                           key={tooth.id}
@@ -450,7 +450,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 )}
                 <div className="flex items-center gap-1">
                   {/* Lado derecho del grupo 5 (43, 42, 41) */}
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo5Inferior.slice(0, 3).reverse().map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -470,9 +470,9 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                     ))}
                   </div>
                   {/* Separador entre incisivos centrales */}
-                  <div className="w-0.5 h-16 bg-accent/30 mx-6"></div>
+                  <div className="w-0.5 h-16 bg-accent/30 mx-2"></div>
                   {/* Lado izquierdo del grupo 5 (31, 32, 33) */}
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo5Inferior.slice(3).map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -518,7 +518,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {developerMode && (
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 3 Row</span>
                 )}
-                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                <div className={`flex gap-2`}>
                   {grupo3.map((tooth) => (
                     <AlignedToothContainer
                       key={tooth.id}
@@ -545,7 +545,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Upper Row (Group 3)</span>
                 )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo3Temp.map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -574,7 +574,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Temp Lower Row (Group 6)</span>
                 )}
                 {showTemporaryTeeth && !showBiteEffect && (
-                  <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                  <div className={`flex gap-2`}>
                     {grupo6Temp.map((tooth) => (
                       <AlignedToothContainer
                         key={tooth.id}
@@ -602,7 +602,7 @@ export const Odontogram: React.FC<OdontogramProps> = ({
                 {developerMode && (
                   <span className="absolute -top-6 left-0 text-xs text-purple-600 font-mono bg-white px-1">Grupo 6 Row</span>
                 )}
-                <div className={`flex gap-1 sm:gap-1.5 lg:gap-2`}>
+                <div className={`flex gap-2`}>
                   {grupo6.map((tooth) => (
                     <AlignedToothContainer
                       key={tooth.id}

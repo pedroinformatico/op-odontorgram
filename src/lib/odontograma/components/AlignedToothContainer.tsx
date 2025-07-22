@@ -27,7 +27,7 @@ export const AlignedToothContainer: React.FC<AlignedToothContainerProps> = ({
     <div 
       className={`
         ${containerHeight}
-        w-[50px] sm:w-[55px] lg:w-[60px]
+        flex-shrink-0
         flex flex-col
         ${alignment}
         relative

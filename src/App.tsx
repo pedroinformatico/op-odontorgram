@@ -25,7 +25,7 @@ function App() {
   const [isAnimatingBite, setIsAnimatingBite] = useState<boolean>(false);
   const [selectedCaseId, setSelectedCaseId] = useState<string>('empty');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [developerMode, setDeveloperMode] = useState<boolean>(true); // Enable developer mode for debugging
+  const [developerMode, setDeveloperMode] = useState<boolean>(false); // Developer mode off by default
 
   // Sincronizar el tema con el atributo del documento al montar
   useEffect(() => {
@@ -205,6 +205,7 @@ function App() {
                 selectedCaseId={selectedCaseId}
                 onCaseSelect={handleCaseSelect}
                 developerMode={developerMode}
+                onToggleDeveloperMode={setDeveloperMode}
               />
               
               {/* Leyenda de colores y símbolos */}

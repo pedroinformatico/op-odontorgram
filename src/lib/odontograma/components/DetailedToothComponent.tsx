@@ -182,15 +182,16 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
   };
 
   const getToothSize = () => {
+    // Usar ancho dinámico con mínimos para mantener proporciones
     if (isTemporary) {
-      if (isFrontal) return 'w-6 sm:w-8';
-      if (isPremolar) return 'w-7 sm:w-9';
-      return 'w-8 sm:w-10';
+      if (isFrontal) return 'min-w-[24px] sm:min-w-[32px]';
+      if (isPremolar) return 'min-w-[28px] sm:min-w-[36px]';
+      return 'min-w-[32px] sm:min-w-[40px]';
     }
     
-    if (isFrontal) return 'w-8 sm:w-10';
-    if (isPremolar) return 'w-9 sm:w-11';
-    return 'w-10 sm:w-12';
+    if (isFrontal) return 'min-w-[32px] sm:min-w-[40px]';
+    if (isPremolar) return 'min-w-[36px] sm:min-w-[44px]';
+    return 'min-w-[40px] sm:min-w-[48px]';
   };
 
   const handleToothClick = (e: React.MouseEvent) => {
@@ -203,7 +204,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
 
   // Componente del label (número del diente)
   const toothLabel = (
-    <div className={isUpper ? "mb-1" : "mt-1"}>
+    <div>
       <div className={`text-xs font-bold flex items-center gap-1 ${isTemporary ? 'text-orange-500' : 'text-accent'}`}>
         <span>{tooth.clinicalId || tooth.id}</span>
         {tooth.notes && (
@@ -215,7 +216,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
 
   // Componente de las raíces
   const toothRoots = (
-    <div className={`w-full ${isTemporary ? 'h-2 sm:h-3' : 'h-3 sm:h-4'} flex justify-center ${isUpper ? 'mb-1' : ''} relative`}>
+    <div className={`w-full ${isTemporary ? 'h-2 sm:h-3' : 'h-3 sm:h-4'} flex justify-center relative`}>
       <div className={isExtracted ? 'opacity-30' : ''}>
         {isFrontal ? (
           <div className={`${isTemporary ? 'w-1 sm:w-1.5 h-2 sm:h-3' : 'w-1.5 sm:w-2 h-3 sm:h-4'} ${getToothStyle(tooth.status)} border-2 ${isUpper ? 'border-b-0 rounded-t-full' : 'border-t-0 rounded-b-full'} shadow-sm`}></div>
@@ -244,7 +245,7 @@ export const DetailedToothComponent: React.FC<DetailedToothComponentProps> = ({
 
   // Componente del diente principal
   const toothBody = (
-    <div className={`${getToothSize()} mb-1 relative`}>
+    <div className={`${getToothSize()} relative`}>
       {/* Corona del diente */}
       <button
         className={`
