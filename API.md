@@ -34,6 +34,8 @@ import { Odontogram } from 'op-odontogram';
 | `onSimulateBite` | `() => void` | ✅ | Simular animación de mordida |
 | `selectedCaseId` | `string` | ❌ | ID del caso clínico seleccionado |
 | `onCaseSelect` | `(caseId: string) => void` | ❌ | Callback para selección de caso |
+| `developerMode` | `boolean` | ❌ | Activa modo desarrollador con visualización de estructura |
+| `onToggleDeveloperMode` | `(enabled: boolean) => void` | ❌ | Callback para toggle de modo desarrollador |
 
 #### Ejemplo de uso
 
