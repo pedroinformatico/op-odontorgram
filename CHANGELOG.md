@@ -5,6 +5,28 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-01-22
+
+### Agregado
+- 🛠️ Modo desarrollador para visualizar estructura del layout con bordes y etiquetas
+- 📏 Sistema de auto-layout con contenedores de altura fija diferenciada
+- 🎯 Altura condicional en AlignedToothContainer según tipo de diente
+- 🔧 Constante TEMPORARY_TOOTH_SLOT_HEIGHT para manejar altura de dientes temporales
+
+### Cambiado
+- 📐 Alturas optimizadas: 130px para dientes permanentes, 100px para temporales
+- 🔧 Refactorización completa del sistema de layout usando offsets positivos
+- 📊 Espaciado mejorado entre dientes y grupos (gap-2)
+- 🎨 Márgenes agregados a etiquetas de grupos para mejor legibilidad (mb-2 superiores, mt-2 inferiores)
+- 📦 Ancho de dientes ahora es dinámico para mejor distribución del espacio
+- 🎯 Eliminación de anchos fijos en favor de min-width para flexibilidad
+
+### Corregido
+- 🦷 Restaurada animación de mordida (boca abierta/cerrada) con showBiteEffect
+- 🐛 Eliminados márgenes internos redundantes (mb-1) que causaban espaciado excesivo
+- 🎯 Alineación vertical mejorada usando offsets consistentes
+- 🔄 Corregida lógica de showBiteEffect en filas temporales para mostrar espacio cuando está activo
+
 ## [1.1.1] - 2024-01-21
 
 ### Documentación
